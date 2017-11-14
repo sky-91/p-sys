@@ -1,0 +1,49 @@
+# Server settings  
+#server:
+#    port: 8080
+#    address: 192.168.1.104
+  
+# SPRING PROFILES  
+spring:         
+    # HTTP ENCODING  
+    http:  
+        encoding.charset: UTF-8  
+        encoding.enable: true  
+        encoding.force: true
+    datasource:
+        name: gendb  
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://localhost:3306/policesys?useConfigs=maxPerformance&characterEncoding=utf8
+        username: root
+        password:
+        driver-class-name: com.mysql.jdbc.Driver  
+        minIdle: 1  
+        maxActive: 2  
+        initialSize: 1  
+        timeBetweenEvictionRunsMillis: 3000  
+        minEvictableIdleTimeMillis: 300000  
+        validationQuery: select 1
+        testWhileIdle: true  
+        testOnBorrow: false  
+        testOnReturn: false
+    thymeleaf:
+        content-type: text/html
+        cache: false
+        mode: LEGACYHTML5
+        #prefix: classpath:/templates/
+        #suffix: .html
+# MyBatis
+mybatis:
+    typeAliasesPackage: cn.qsky.policesys.core.dao.model
+    mapperLocations: classpath:mybatis/**/*.xml
+    configLocation: classpath:/mybatis-config.xml
+
+# LOGGING
+logging:
+    level:
+       com.ibatis:DEBUG
+
+# ERP CUSTOM CONFIG
+policesys:
+  upload:
+    address: D:\upload
