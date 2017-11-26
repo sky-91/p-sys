@@ -1,0 +1,44 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qsky.policesys.core.dao.mapper.UserMapper">
+  <resultMap id="UserResultMap" type="cn.qsky.policesys.core.dao.model.UserModel">
+    <id column="PK" jdbcType="BIGINT" property="pk"/>
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+    <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+    <result column="password" jdbcType="VARCHAR" property="password"/>
+    <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+    <result column="id_card" jdbcType="VARCHAR" property="idCard"/>
+    <result column="phone" jdbcType="VARCHAR" property="phone"/>
+    <result column="delete_flag" jdbcType="BIT" property="deleteFlag"/>
+    <collection property="roleList" columnPrefix="role_"
+      ofType="cn.qsky.policesys.core.dao.model.RoleModel">
+      <id column="PK" jdbcType="BIGINT" property="pk"/>
+      <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+      <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+      <result column="role_id" jdbcType="VARCHAR" property="roleId"/>
+      <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+      <result column="delete_flag" jdbcType="BIT" property="deleteFlag"/>
+    </collection>
+  </resultMap>
+  <select id="getUser" resultMap="UserResultMap" parameterType="java.lang.String">
+    SELECT
+      u.pk AS pk, u.created_time AS created_time, u.modified_time AS modified_time,
+      u.user_id AS user_id, u.password AS password, u.user_name AS user_name,
+      u.id_card AS id_card, u.phone AS phone, u.delete_flag AS delete_flag,
+      r.pk AS role_pk, r.created_time AS role_created_time,
+      r.modified_time AS role_modified_time, r.role_id AS role_role_id,
+      r.role_name AS role_role_name, r.delete_flag AS role_delete_flag
+    FROM
+      user AS u
+      JOIN
+        user_to_role AS ur
+        ON u.pk = ur.user_pk
+      JOIN
+        role AS r
+        ON r.pk = ur.role_pk
+    WHERE
+      u.user_id = #{userId,jdbcType=VARCHAR}
+      and u.delete_flag = 0
+  </select>
+</mapper>

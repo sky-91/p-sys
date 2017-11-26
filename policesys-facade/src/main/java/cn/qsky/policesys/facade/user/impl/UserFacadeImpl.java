@@ -2,15 +2,18 @@ package cn.qsky.policesys.facade.user.impl;
 
 import cn.qsky.policesys.common.util.CglibBeanUtil;
 import cn.qsky.policesys.common.util.DateUtil;
+import cn.qsky.policesys.common.util.DozerBeanMapperFactory;
 import cn.qsky.policesys.core.dao.model.UserModel;
 import cn.qsky.policesys.core.user.UserService;
 import cn.qsky.policesys.facade.user.UserFacade;
+import cn.qsky.policesys.facade.user.data.RoleData;
 import cn.qsky.policesys.facade.user.data.UserData;
 import javax.annotation.Resource;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -23,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserFacadeImpl implements UserFacade {
 
   private static Logger LOG = LoggerFactory.getLogger(UserFacadeImpl.class);
+  private static DozerBeanMapper mapper = DozerBeanMapperFactory.getMapper();
 
   @Resource
   private UserService userService;
@@ -37,8 +41,19 @@ public class UserFacadeImpl implements UserFacade {
   }
 
   @Override
-  public UserData getUserInfoById(String uid) {
-    return CglibBeanUtil.copyProperties(userService.getByUid(uid), UserData.class);
+  public UserData getUserInfoById(String userId) {
+    if (userService.getByUid(userId) == null) {
+      return null;
+    }
+    return mapper.map(userService.getByUid(userId), UserData.class);
+  }
+
+  @Override
+  public RoleData getRoleById(String roleId) {
+    if (userService.getRole(roleId) == null) {
+      return null;
+    }
+    return mapper.map(userService.getRole(roleId), RoleData.class);
   }
 
   @Override

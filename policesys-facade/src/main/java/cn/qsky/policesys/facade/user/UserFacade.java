@@ -1,5 +1,6 @@
 package cn.qsky.policesys.facade.user;
 
+import cn.qsky.policesys.facade.user.data.RoleData;
 import cn.qsky.policesys.facade.user.data.UserData;
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -24,6 +25,14 @@ public interface UserFacade {
    * @return UserData
    */
   UserData getUserInfoById(final String userId);
+
+  /**
+   * 获取角色
+   *
+   * @param roleId roleId
+   * @return RoleData
+   */
+  RoleData getRoleById(final String roleId);
 
   /**
    * excel导入用户

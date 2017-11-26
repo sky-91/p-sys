@@ -57,18 +57,6 @@ public class CglibBeanUtil {
     if (inList == null || inList.size() == 0) {
       return Collections.emptyList();
     }
-    List<O> outList = Lists.transform(inList, i -> {
-      O oo = BeanUtils.instantiate(o);
-      copyProperties(i, oo);
-      return oo;
-    });
-    return outList;
-  }
-
-  public static <O, I> List<O> converterList2(List<I> inList, Class<O> o) {
-    if (inList == null || inList.size() == 0) {
-      return Collections.emptyList();
-    }
     List<O> outList = new ArrayList<>(inList.size());
     for (I i : inList) {
       O oo = BeanUtils.instantiate(o);

@@ -1,5 +1,6 @@
 package cn.qsky.policesys.facade.user.data;
 
+import java.util.List;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -17,6 +18,10 @@ public class UserData {
   private String idCard;
 
   private String phone;
+
+  private Boolean deleteFlag;
+
+  private List<RoleData> roleList;
 
   public String getUserId() {
     return userId;
@@ -56,6 +61,22 @@ public class UserData {
 
   public void setPhone(String phone) {
     this.phone = phone;
+  }
+
+  public Boolean getDeleteFlag() {
+    return deleteFlag;
+  }
+
+  public void setDeleteFlag(Boolean deleteFlag) {
+    this.deleteFlag = deleteFlag;
+  }
+
+  public List<RoleData> getRoleList() {
+    return roleList;
+  }
+
+  public void setRoleList(List<RoleData> roleList) {
+    this.roleList = roleList;
   }
 
   @Override

@@ -1,0 +1,44 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qsky.policesys.core.dao.mapper.RoleMapper">
+  <resultMap id="RoleResultMap" type="cn.qsky.policesys.core.dao.model.RoleModel">
+    <id column="PK" jdbcType="BIGINT" property="pk"/>
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+    <result column="role_id" jdbcType="VARCHAR" property="roleId"/>
+    <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+    <result column="delete_flag" jdbcType="BIT" property="deleteFlag"/>
+    <collection property="permissionList" columnPrefix="p_"
+      ofType="cn.qsky.policesys.core.dao.model.PermissionModel">
+      <id column="PK" jdbcType="BIGINT" property="pk"/>
+      <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+      <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+      <result column="code" jdbcType="VARCHAR" property="code"/>
+      <result column="name" jdbcType="VARCHAR" property="name"/>
+      <result column="resourceType" jdbcType="VARCHAR" property="resourcetype"/>
+      <result column="url" jdbcType="VARCHAR" property="url"/>
+      <result column="permission" jdbcType="VARCHAR" property="permission"/>
+      <result column="parent" jdbcType="BIGINT" property="parent"/>
+      <result column="delete_flag" jdbcType="BIT" property="deleteFlag"/>
+    </collection>
+  </resultMap>
+  <select id="getRole" resultMap="RoleResultMap" parameterType="java.lang.String">
+    SELECT
+    r.pk AS pk, r.created_time AS created_time, r.modified_time AS modified_time, 
+    r.role_id AS role_id, r.role_name AS role_name, r.delete_flag AS delete_flag,
+    p.pk AS p_pk, p.created_time AS p_created_time, p.modified_time AS p_modified_time,
+    p.code AS p_code, p.name AS p_name, p.resourceType AS p_resourceType,
+    p.url AS p_url, p.permission AS p_permission, p.parent AS p_parent, p.delete_flag AS p_delete_flag
+    FROM
+      role AS r
+      JOIN
+        role_to_permission AS rp
+        ON r.pk = rp.role_pk
+      JOIN
+        permission AS p
+        ON r.pk = up.p_pk
+    WHERE
+      r.role_id = #{roleId,jdbcType=VARCHAR}
+      and r.delete_flag = 0
+  </select>
+</mapper>
