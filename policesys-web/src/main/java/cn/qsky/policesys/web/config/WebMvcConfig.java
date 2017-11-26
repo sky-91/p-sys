@@ -1,18 +1,15 @@
 package cn.qsky.policesys.web.config;
 
-import cn.qsky.policesys.web.security.Interceptor.SessionInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -58,20 +55,4 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
     super.addResourceHandlers(registry);
   }
-
-  /**
-   * 配置拦截器
-   */
-  @Override
-  public void addInterceptors(InterceptorRegistry registry) {
-    // TODO session拦截器，用于session过期时向页面返回信息，使用swagger测试接口时需要注释掉下面的代码
-    registry.addInterceptor(sessionInterceptor()).addPathPatterns("/**")
-        .excludePathPatterns("/login", "/demo/**", "/swagger-ui.html", "/static/**");
-  }
-
-  @Bean
-  SessionInterceptor sessionInterceptor() {
-    return new SessionInterceptor();
-  }
-
 }

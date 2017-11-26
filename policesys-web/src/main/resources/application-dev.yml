@@ -26,12 +26,19 @@ spring:
         testWhileIdle: true  
         testOnBorrow: false  
         testOnReturn: false
-    thymeleaf:
+    freemarker:
+        template-loader-path: classpath:/templates
+        allow-request-override: false
+        spring.freemarker.cache: true
+        check-template-location: true
+        charset: UTF-8
         content-type: text/html
-        cache: false
-        mode: LEGACYHTML5
-        #prefix: classpath:/templates/
-        #suffix: .html
+        expose-request-attributes: false
+        expose-session-attributes: false
+        expose-spring-macro-helpers: false
+        suffix: .ftl
+    mvc:
+        static-path-pattern: /static/**
 # MyBatis
 mybatis:
     typeAliasesPackage: cn.qsky.policesys.core.dao.model
