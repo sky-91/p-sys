@@ -101,6 +101,7 @@ CREATE TABLE `special_person` (
     `activity_time` DATETIME(3) COMMENT '活动时间',
     `push_time` DATETIME(3) COMMENT '推送时间',
     `domicile` VARCHAR(80) COMMENT '户籍地',
+    `person_type` tinyint(1) NOT NULL COMMENT '人员类型',
     `nation` VARCHAR(5) COMMENT '民族',
     `stay_internet_site` VARCHAR(5) COMMENT '住宿上网地点',
     `tj_time_reason` VARCHAR(50) COMMENT '来津时间及事由',

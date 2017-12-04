@@ -1,0 +1,78 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qsky.policesys.core.dao.mapper.SpecialPersonMapper">
+  <resultMap id="SpecialPersonResultMap" type="cn.qsky.policesys.core.dao.model.SpecialPersonModel">
+    <id column="PK" jdbcType="BIGINT" property="pk"/>
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="id_card" jdbcType="CHAR" property="idCard"/>
+    <result column="phone" jdbcType="VARCHAR" property="phone"/>
+    <result column="jurisdiction" jdbcType="VARCHAR" property="jurisdiction"/>
+    <result column="resource_name" jdbcType="VARCHAR" property="resourceName"/>
+    <result column="activity_place" jdbcType="VARCHAR" property="activityPlace"/>
+    <result column="activity_place_detail" jdbcType="VARCHAR" property="activityPlaceDetail"/>
+    <result column="activity_time" jdbcType="TIMESTAMP" property="activityTime"/>
+    <result column="push_time" jdbcType="TIMESTAMP" property="pushTime"/>
+    <result column="domicile" jdbcType="VARCHAR" property="domicile"/>
+    <result column="person_type" jdbcType="BIT" property="personType"/>
+    <result column="nation" jdbcType="VARCHAR" property="nation"/>
+    <result column="stay_internet_site" jdbcType="VARCHAR" property="stayInternetSite"/>
+    <result column="tj_time_reason" jdbcType="VARCHAR" property="tjTimeReason"/>
+    <result column="vehicle" jdbcType="VARCHAR" property="vehicle"/>
+    <result column="tj_stay_site" jdbcType="VARCHAR" property="tjStaySite"/>
+    <result column="tj_contact" jdbcType="VARCHAR" property="tjContact"/>
+    <result column="belongings" jdbcType="VARCHAR" property="belongings"/>
+    <result column="virtual_identity" jdbcType="VARCHAR" property="virtualIdentity"/>
+    <result column="peer_staff" jdbcType="VARCHAR" property="peerStaff"/>
+    <result column="stay_staff" jdbcType="VARCHAR" property="stayStaff"/>
+    <result column="car_num" jdbcType="VARCHAR" property="carNum"/>
+    <result column="terrorist_char" jdbcType="VARCHAR" property="terroristChar"/>
+    <result column="control_type" jdbcType="VARCHAR" property="controlType"/>
+    <result column="check_site" jdbcType="VARCHAR" property="checkSite"/>
+    <result column="check_police" jdbcType="VARCHAR" property="checkPolice"/>
+    <result column="delete_flag" jdbcType="BIT" property="deleteFlag"/>
+  </resultMap>
+  <select id="listSpecialPersonForPage" resultMap="SpecialPersonResultMap">
+    SELECT
+    pk, created_time, modified_time, name, id_card, phone, jurisdiction, resource_name,
+    activity_place, activity_place_detail, activity_time, push_time, domicile, person_type,
+    nation, stay_internet_site, tj_time_reason, vehicle, tj_stay_site, tj_contact, belongings,
+    virtual_identity, peer_staff, stay_staff, car_num, terrorist_char, control_type, check_site,
+    check_police, delete_flag
+    FROM
+    special_person
+    WHERE
+    <choose>
+      <when test="startActivityTime == null and endActivityTime != null">
+        and activity_time &lt;= #{endActivityTime,jdbcType=TIMESTAMP}
+      </when>
+      <when test="startActivityTime != null and endActivityTime == null">
+        and activity_time >= #{startActivityTime,jdbcType=TIMESTAMP}
+      </when>
+      <when test="startActivityTime != null and endActivityTime != null">
+        and activity_time >= #{startActivityTime,jdbcType=TIMESTAMP}
+        and activity_time &lt;= #{endActivityTime,jdbcType=TIMESTAMP}
+      </when>
+    </choose>
+    <choose>
+      <when test="startPushTime == null and endPushTime != null">
+        and push_time &lt;= #{endPushTime,jdbcType=TIMESTAMP}
+      </when>
+      <when test="startPushTime != null and endPushTime == null">
+        and push_time >= #{startPushTime,jdbcType=TIMESTAMP}
+      </when>
+      <when test="startPushTime != null and endPushTime != null">
+        and push_time >= #{startPushTime,jdbcType=TIMESTAMP}
+        and push_time &lt;= #{endPushTime,jdbcType=TIMESTAMP}
+      </when>
+    </choose>
+    <if test="jurisdiction != null">
+      and jurisdiction = #{jurisdiction,jdbcType=VARCHAR}
+    </if>
+    <if test="personType != null">
+      and person_type = #{personType,jdbcType=BIT}
+    </if>
+    and delete_flag = 0
+  </select>
+</mapper>

@@ -1057,6 +1057,66 @@ public class SpecialPersonModelExample {
       return (Criteria) this;
     }
 
+    public Criteria andPersonTypeIsNull() {
+      addCriterion("person_type is null");
+      return (Criteria) this;
+    }
+
+    public Criteria andPersonTypeIsNotNull() {
+      addCriterion("person_type is not null");
+      return (Criteria) this;
+    }
+
+    public Criteria andPersonTypeEqualTo(Boolean value) {
+      addCriterion("person_type =", value, "personType");
+      return (Criteria) this;
+    }
+
+    public Criteria andPersonTypeNotEqualTo(Boolean value) {
+      addCriterion("person_type <>", value, "personType");
+      return (Criteria) this;
+    }
+
+    public Criteria andPersonTypeGreaterThan(Boolean value) {
+      addCriterion("person_type >", value, "personType");
+      return (Criteria) this;
+    }
+
+    public Criteria andPersonTypeGreaterThanOrEqualTo(Boolean value) {
+      addCriterion("person_type >=", value, "personType");
+      return (Criteria) this;
+    }
+
+    public Criteria andPersonTypeLessThan(Boolean value) {
+      addCriterion("person_type <", value, "personType");
+      return (Criteria) this;
+    }
+
+    public Criteria andPersonTypeLessThanOrEqualTo(Boolean value) {
+      addCriterion("person_type <=", value, "personType");
+      return (Criteria) this;
+    }
+
+    public Criteria andPersonTypeIn(List<Boolean> values) {
+      addCriterion("person_type in", values, "personType");
+      return (Criteria) this;
+    }
+
+    public Criteria andPersonTypeNotIn(List<Boolean> values) {
+      addCriterion("person_type not in", values, "personType");
+      return (Criteria) this;
+    }
+
+    public Criteria andPersonTypeBetween(Boolean value1, Boolean value2) {
+      addCriterion("person_type between", value1, value2, "personType");
+      return (Criteria) this;
+    }
+
+    public Criteria andPersonTypeNotBetween(Boolean value1, Boolean value2) {
+      addCriterion("person_type not between", value1, value2, "personType");
+      return (Criteria) this;
+    }
+
     public Criteria andNationIsNull() {
       addCriterion("nation is null");
       return (Criteria) this;
