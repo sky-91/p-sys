@@ -51,7 +51,6 @@ public class SpecialPersonController {
         .copyProperties(specialPersonFacade.getSpecialPerson(idCard), SpecialPersonVO.class);
   }
 
-
   @ApiOperation(value = "疆藏人员清单列表", notes = "分页显示疆藏人员清单")
   @ApiImplicitParams({
       @ApiImplicitParam(name = "startActivityTime", value = "起始活动时间", paramType = "query", dataType = "Date"),

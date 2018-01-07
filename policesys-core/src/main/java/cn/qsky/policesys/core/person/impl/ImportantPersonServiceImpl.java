@@ -68,8 +68,8 @@ public class ImportantPersonServiceImpl implements ImportantPersonService {
       ImportantPersonPageQueryDTO importantPersonPageQueryDTO) {
     Page<ImportantPersonInfoModel> page = PageHelper
         .startPage(importantPersonPageQueryDTO.getPageNum(),
-            importantPersonPageQueryDTO.getPageSize()).doSelectPage(
-            () -> importantPersonInfoMapper.listSpecialPersonForPage(importantPersonPageQueryDTO));
+            importantPersonPageQueryDTO.getPageSize()).doSelectPage(() -> importantPersonInfoMapper
+            .listImportantPersonInfoForPage(importantPersonPageQueryDTO));
     return page;
   }
 }

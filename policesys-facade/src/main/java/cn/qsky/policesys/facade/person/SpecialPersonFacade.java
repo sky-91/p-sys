@@ -9,7 +9,6 @@ import java.util.Map;
  */
 public interface SpecialPersonFacade {
 
-
   /**
    * 根据身份证获取特殊人员信息
    *

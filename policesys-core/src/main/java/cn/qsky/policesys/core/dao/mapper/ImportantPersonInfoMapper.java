@@ -5,6 +5,7 @@ import cn.qsky.policesys.core.dao.model.ImportantPersonInfoModel;
 import cn.qsky.policesys.core.dao.model.ImportantPersonInfoModelExample;
 import cn.qsky.policesys.core.dto.ImportantPersonPageQueryDTO;
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface ImportantPersonInfoMapper extends
     MybatisBaseRepository<ImportantPersonInfoModel, Long, ImportantPersonInfoModelExample> {
@@ -23,6 +24,6 @@ public interface ImportantPersonInfoMapper extends
    * @param importantPersonPageQueryDTO dto
    * @return List
    */
-  List<ImportantPersonInfoModel> listSpecialPersonForPage(
-      final ImportantPersonPageQueryDTO importantPersonPageQueryDTO);
+  List<ImportantPersonInfoModel> listImportantPersonInfoForPage(
+      @Param(value = "queryDTO") final ImportantPersonPageQueryDTO importantPersonPageQueryDTO);
 }
