@@ -1,0 +1,62 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qsky.policesys.core.dao.mapper.GroupRecordMapper">
+    <resultMap id="RecordListResultMap" type="cn.qsky.policesys.core.dao.model.GroupRecordModel">
+        <id column="PK" jdbcType="BIGINT" property="pk"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="group_name" jdbcType="CHAR" property="groupName"/>
+        <result column="record_date" jdbcType="DATE" property="recordDate"/>
+        <result column="score" jdbcType="TINYINT" property="score"/>
+        <result column="petition_location" jdbcType="VARCHAR" property="petitionLocation"/>
+        <result column="petition_region" jdbcType="CHAR" property="petitionRegion"/>
+        <result column="petition_dynamic" jdbcType="VARCHAR" property="petitionDynamic"/>
+        <result column="confirm" jdbcType="BIT" property="confirm"/>
+        <result column="incite_method" jdbcType="VARCHAR" property="inciteMethod"/>
+        <result column="info_sources" jdbcType="VARCHAR" property="infoSources"/>
+        <result column="action_group" jdbcType="VARCHAR" property="actionGroup"/>
+        <result column="group_size" jdbcType="SMALLINT" property="groupSize"/>
+        <result column="consequence" jdbcType="BIT" property="consequence"/>
+        <result column="conse_score" jdbcType="TINYINT" property="conseScore"/>
+        <result column="petition_situation" jdbcType="VARCHAR" property="petitionSituation"/>
+        <result column="delete_flag" jdbcType="BIT" property="deleteFlag"/>
+    </resultMap>
+    <select id="listGroupRecordForPage" resultMap="RecordListResultMap"
+            parameterType="cn.qsky.policesys.core.dto.GroupRecordPageQueryDTO">
+      SELECT
+        PK, created_time, modified_time, group_name, record_date, score, petition_location,
+        petition_region, petition_dynamic, confirm, incite_method, info_sources, action_group,
+        group_size, consequence, conse_score, petition_situation, delete_flag
+      FROM
+        group_record
+      WHERE
+        delete_flag = 0
+        <if test="queryDTO.groupName != null and queryDTO.groupName != ''">
+            and group_name = #{groupName,jdbcType=VARCHAR}
+        </if>
+        <choose>
+            <when test="queryDTO.startRecordDate == null and queryDTO.endRecordDate != null">
+                and record_date &lt;= #{endRecordDate,jdbcType=DATE}
+            </when>
+            <when test="queryDTO.startRecordDate != null and queryDTO.endRecordDate == null">
+                and record_date >= #{startRecordDate,jdbcType=DATE}
+            </when>
+            <when test="queryDTO.startRecordDate != null and queryDTO.endRecordDate != null">
+                and record_date >= #{startRecordDate,jdbcType=DATE}
+                and record_date &lt;= #{endRecordDate,jdbcType=DATE}
+            </when>
+        </choose>
+        <if test="queryDTO.petitionLocation != null and queryDTO.petitionLocation != ''">
+            and petition_location = #{petitionLocation,jdbcType=VARCHAR}
+        </if>
+        <if test="queryDTO.petitionRegion != null and queryDTO.petitionRegion != ''">
+            and petition_region = #{petitionRegion,jdbcType=VARCHAR}
+        </if>
+        <if test="queryDTO.inciteMethod != null and queryDTO.inciteMethod != ''">
+            and incite_method = #{inciteMethod,jdbcType=VARCHAR}
+        </if>
+        <if test="queryDTO.infoSources != null and queryDTO.infoSources != ''">
+            and info_sources = #{infoSources,jdbcType=VARCHAR}
+        </if>
+    </select>
+</mapper>

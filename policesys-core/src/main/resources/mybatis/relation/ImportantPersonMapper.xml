@@ -80,7 +80,7 @@
         and i.age &lt;= #{endAge,jdbcType=TINYINT}
       </when>
       <when test="queryDTO.startAge != null and queryDTO.endAge == null">
-        and i.age = #{startAge,jdbcType=TINYINT}
+        and i.age >= #{startAge,jdbcType=TINYINT}
       </when>
       <when test="queryDTO.startAge != null and queryDTO.endAge != null">
         and i.age >= #{startAge,jdbcType=TINYINT}

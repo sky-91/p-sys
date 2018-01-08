@@ -1,30 +1,30 @@
-# Server settings  
+# Server settings
 #server:
 #    port: 8080
 #    address: 192.168.1.104
-  
-# SPRING PROFILES  
-spring:         
-    # HTTP ENCODING  
-    http:  
-        encoding.charset: UTF-8  
-        encoding.enable: true  
+
+# SPRING PROFILES
+spring:
+    # HTTP ENCODING
+    http:
+        encoding.charset: UTF-8
+        encoding.enable: true
         encoding.force: true
     datasource:
-        name: gendb  
+        name: gendb
         type: com.alibaba.druid.pool.DruidDataSource
         url: jdbc:mysql://localhost:3306/policesys?useConfigs=maxPerformance&characterEncoding=utf8
         username: root
-        password:
-        driver-class-name: com.mysql.jdbc.Driver  
-        minIdle: 1  
-        maxActive: 2  
-        initialSize: 1  
-        timeBetweenEvictionRunsMillis: 3000  
-        minEvictableIdleTimeMillis: 300000  
+        password: 123456
+        driver-class-name: com.mysql.jdbc.Driver
+        minIdle: 1
+        maxActive: 2
+        initialSize: 1
+        timeBetweenEvictionRunsMillis: 3000
+        minEvictableIdleTimeMillis: 300000
         validationQuery: select 1
-        testWhileIdle: true  
-        testOnBorrow: false  
+        testWhileIdle: true
+        testOnBorrow: false
         testOnReturn: false
     freemarker:
         template-loader-path: classpath:/templates

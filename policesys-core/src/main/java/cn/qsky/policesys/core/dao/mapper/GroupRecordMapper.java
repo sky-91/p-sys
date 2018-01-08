@@ -4,6 +4,8 @@ import cn.qsky.policesys.core.dao.MybatisBaseRepository;
 import cn.qsky.policesys.core.dao.model.GroupRecordModel;
 import cn.qsky.policesys.core.dao.model.GroupRecordModelExample;
 import cn.qsky.policesys.core.dto.GroupRecordPageQueryDTO;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 public interface GroupRecordMapper extends
@@ -16,5 +18,5 @@ public interface GroupRecordMapper extends
    * @return list
    */
   List<GroupRecordModel> listGroupRecordForPage(
-      final GroupRecordPageQueryDTO groupRecordPageQueryDTO);
+          @Param(value = "queryDTO") final GroupRecordPageQueryDTO groupRecordPageQueryDTO);
 }
