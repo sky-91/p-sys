@@ -3,6 +3,7 @@ package cn.qsky.policesys.facade.person;
 import cn.qsky.policesys.common.data.PageData;
 import cn.qsky.policesys.facade.person.data.ImportantPersonInfoData;
 import cn.qsky.policesys.facade.person.data.ImportantPersonPageQueryData;
+import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  * @author qsky on 17/12/6
@@ -41,4 +42,20 @@ public interface ImportantPersonFacade {
    */
   PageData<ImportantPersonInfoData> listImportantPersonForPage(
       final ImportantPersonPageQueryData importantPersonPageQueryData);
+
+  /**
+   * 文件导入重点人员底库
+   *
+   * @param workbook 文件
+   * @return boolean
+   */
+  Boolean uploadPersonInfo(Workbook workbook);
+
+  /**
+   * 文件导入人员记录
+   *
+   * @param workbook 文件
+   * @return boolean
+   */
+  Boolean uploadPersonRecord(Workbook workbook);
 }

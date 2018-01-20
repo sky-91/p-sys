@@ -3,6 +3,7 @@ package cn.qsky.policesys.web.controller;
 import cn.qsky.policesys.common.util.CglibBeanUtil;
 import cn.qsky.policesys.common.vo.PageVO;
 import cn.qsky.policesys.common.vo.PageVOConverter;
+import cn.qsky.policesys.facade.person.SpecialPersonBuilder;
 import cn.qsky.policesys.facade.person.SpecialPersonFacade;
 import cn.qsky.policesys.facade.person.data.SpecialPersonData;
 import cn.qsky.policesys.web.vo.SpecialPersonVO;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.hibernate.validator.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author qsky on 17/12/3
@@ -41,6 +45,9 @@ public class SpecialPersonController {
 
   @Resource
   private SpecialPersonFacade specialPersonFacade;
+
+  @Resource
+  private SpecialPersonBuilder specialPersonBuilder;
 
   @ApiOperation(value = "根据身份证查询疆藏人员信息", notes = "根据身份证查询疆藏人员信息")
   @ApiImplicitParam(name = "idCard", value = "身份证", required = true, dataType = "String", paramType = "path")
@@ -103,5 +110,21 @@ public class SpecialPersonController {
     LOG.debug(specialPersonVO.toString());
     return specialPersonFacade.updateSpecialPerson(CglibBeanUtil.copyProperties(specialPersonVO,
         SpecialPersonData.class));
+  }
+
+  @ApiOperation(value = "文件导入疆藏人员信息", notes = "导入文件")
+  @PostMapping(value = "upload")
+  public @ResponseBody
+  Boolean importSpecialPerson(@RequestParam("file") MultipartFile file) {
+    if (!file.isEmpty()) {
+      try {
+        return specialPersonFacade
+            .uploadSpecialPerson(WorkbookFactory.create(file.getInputStream()));
+      } catch (Exception e) {
+        e.printStackTrace();
+        LOG.error("File {} is wrong!", file.getOriginalFilename());
+      }
+    }
+    return true;
   }
 }

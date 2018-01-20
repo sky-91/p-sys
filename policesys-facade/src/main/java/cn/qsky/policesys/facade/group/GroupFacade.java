@@ -5,6 +5,7 @@ import cn.qsky.policesys.facade.group.data.GroupRecordData;
 import cn.qsky.policesys.facade.group.data.GroupRecordPageQueryData;
 import cn.qsky.policesys.facade.group.data.GroupSummaryData;
 import java.util.List;
+import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  * @author qsky on 18/1/7
@@ -74,4 +75,20 @@ public interface GroupFacade {
    */
   PageData<GroupRecordData> listGroupRecordForPage(
       final GroupRecordPageQueryData groupRecordPageQueryData);
+
+  /**
+   * 文件导入群体汇总信息
+   *
+   * @param workbook 文件
+   * @return boolean
+   */
+  Boolean uploadGroupInfo(Workbook workbook);
+
+  /**
+   * 文件导入群体活动记录
+   *
+   * @param workbook 文件
+   * @return boolean
+   */
+  Boolean uploadGroupRecord(Workbook workbook);
 }

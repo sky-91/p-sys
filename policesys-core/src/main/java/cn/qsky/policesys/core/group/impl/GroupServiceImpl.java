@@ -44,7 +44,11 @@ public class GroupServiceImpl implements GroupService {
   public int countGroupSummary(String groupName) {
     GroupSummaryModelExample example = new GroupSummaryModelExample();
     example.or().andGroupNameEqualTo(groupName);
-    return groupSummaryMapper.countByExample(example);
+    List<GroupSummaryModel> resultList = groupSummaryMapper.selectByExample(example);
+    if (CollectionUtils.isEmpty(resultList)) {
+      return 0;
+    }
+    return resultList.size();
   }
 
   @Override

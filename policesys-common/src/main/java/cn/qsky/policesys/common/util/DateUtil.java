@@ -356,4 +356,16 @@ public class DateUtil {
     return false;
   }
 
+  /**
+   * 根据指定的年月日生成日期
+   * @param year 年
+   * @param month 月
+   * @param day 日
+   * @return 日期
+   */
+  public static final Date setPointDate(int year, int month, int day) {
+    Calendar cal = Calendar.getInstance();
+    cal.set(year, month, day);
+    return cal.getTime();
+  }
 }

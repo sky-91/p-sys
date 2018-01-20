@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.dozer.DozerBeanMapper;
 import org.hibernate.validator.constraints.NotBlank;
 import org.slf4j.Logger;
@@ -26,6 +27,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author qsky on 18/1/7
@@ -80,5 +84,37 @@ public class ImportantPersonController {
     return PageVOConverter.converter(importantPersonFacade.listImportantPersonForPage(CglibBeanUtil
             .copyProperties(importantPersonPageQueryVO, ImportantPersonPageQueryData.class)),
         ImportantPersonInfoVO.class);
+  }
+
+  @ApiOperation(value = "文件导入重点人员信息", notes = "导入文件")
+  @PostMapping(value = "/upload")
+  public @ResponseBody
+  Boolean importPerson(@RequestParam("file") MultipartFile file) {
+    if (!file.isEmpty()) {
+      try {
+        return importantPersonFacade
+            .uploadPersonInfo(WorkbookFactory.create(file.getInputStream()));
+      } catch (Exception e) {
+        e.printStackTrace();
+        LOG.error("Import important person, File {} is wrong!", file.getOriginalFilename());
+      }
+    }
+    return true;
+  }
+
+  @ApiOperation(value = "文件导入重点人员活动轨迹", notes = "导入文件")
+  @PostMapping(value = "record/upload")
+  public @ResponseBody
+  Boolean importRecord(@RequestParam("file") MultipartFile file) {
+    if (!file.isEmpty()) {
+      try {
+        return importantPersonFacade
+            .uploadPersonRecord(WorkbookFactory.create(file.getInputStream()));
+      } catch (Exception e) {
+        e.printStackTrace();
+        LOG.error("Import important person record, File {} is wrong!", file.getOriginalFilename());
+      }
+    }
+    return true;
   }
 }

@@ -11,6 +11,14 @@ import com.github.pagehelper.Page;
 public interface ImportantPersonService {
 
   /**
+   * 只获取重点人员自身信息
+   *
+   * @param idCard 身份证
+   * @return ImportantPersonInfoModel
+   */
+  ImportantPersonInfoModel getSimplePersonInfo(final String idCard);
+
+  /**
    * 根据身份证获取重点人员详细信息
    *
    * @param idCard 身份证

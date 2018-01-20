@@ -50,17 +50,22 @@ public class LoginController {
       subject.login(token);
       UserData user = userFacade.getUserInfoById(username);
       subject.getSession().setAttribute("user", user);
-      result.put("url", "/index");
+      result.put("success", true);
+      result.put("message", "登陆成功!");
     } catch (IncorrectCredentialsException ice) {
       // 捕获密码错误异常
+      result.put("success", false);
       result.put("message", "密码错误!");
     } catch (UnknownAccountException uae) {
       // 捕获未知用户名异常
+      result.put("success", false);
       result.put("message", "用户名不存在!");
     } catch (ExcessiveAttemptsException eae) {
       // 捕获错误登录过多的异常
+      result.put("success", false);
       result.put("message", "错误次数过多");
     } catch (LockedAccountException lae) {
+      result.put("success", false);
       result.put("message", "用户被锁定");
     }
     return result;

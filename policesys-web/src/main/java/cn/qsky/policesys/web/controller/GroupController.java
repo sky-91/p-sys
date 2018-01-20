@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiParam;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.hibernate.validator.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author qsky on 18/1/7
@@ -113,5 +117,35 @@ public class GroupController {
     return PageVOConverter.converter(groupFacade.listGroupRecordForPage(CglibBeanUtil
             .copyProperties(groupRecordPageQueryDTO, GroupRecordPageQueryData.class)),
         GroupRecordVO.class);
+  }
+
+  @ApiOperation(value = "文件导入群体汇总信息", notes = "导入文件")
+  @PostMapping(value = "upload")
+  public @ResponseBody
+  Boolean importGroup(@RequestParam("file") MultipartFile file) {
+    if (!file.isEmpty()) {
+      try {
+        return groupFacade.uploadGroupInfo(WorkbookFactory.create(file.getInputStream()));
+      } catch (Exception e) {
+        e.printStackTrace();
+        LOG.error("Import group, File {} is wrong!", file.getOriginalFilename());
+      }
+    }
+    return true;
+  }
+
+  @ApiOperation(value = "文件导入重点人员活动轨迹", notes = "导入文件")
+  @PostMapping(value = "record/upload")
+  public @ResponseBody
+  Boolean importRecord(@RequestParam("file") MultipartFile file) {
+    if (!file.isEmpty()) {
+      try {
+        return groupFacade.uploadGroupRecord(WorkbookFactory.create(file.getInputStream()));
+      } catch (Exception e) {
+        e.printStackTrace();
+        LOG.error("Import group record, File {} is wrong!", file.getOriginalFilename());
+      }
+    }
+    return true;
   }
 }

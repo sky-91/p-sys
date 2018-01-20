@@ -9,6 +9,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
  */
 public class ImportantPersonInfoData {
 
+  private String index;
+
   private String name;
 
   private String idCard;
@@ -52,6 +54,14 @@ public class ImportantPersonInfoData {
   private List<PersonContactInfoData> contacts;
 
   private List<ImportantPersonRecordData> records;
+
+  public String getIndex() {
+    return index;
+  }
+
+  public void setIndex(String index) {
+    this.index = index;
+  }
 
   public String getName() {
     return name;

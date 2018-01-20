@@ -6,6 +6,8 @@
   <title>首页</title>
 </head>
 <body>
-------------登录成功------------
+<div>------------登录成功------------</div>
+<div>${name},欢迎使用！</div>
+<a href="/user/userList">用户列表</a>
 </body>
 </html>

@@ -2,6 +2,8 @@ package cn.qsky.policesys.facade.person;
 
 import cn.qsky.policesys.common.data.PageData;
 import cn.qsky.policesys.facade.person.data.SpecialPersonData;
+import org.apache.poi.ss.usermodel.Workbook;
+
 import java.util.Map;
 
 /**
@@ -43,4 +45,12 @@ public interface SpecialPersonFacade {
    */
   PageData<SpecialPersonData> listSpecialPersonForPage(final Map<String, Object> queryMap,
       final Integer pageNum, final Integer pageSize);
+
+  /**
+   * 文件导入疆藏人员信息
+   *
+   * @param workbook 文件
+   * @return boolean
+   */
+  Boolean uploadSpecialPerson(Workbook workbook);
 }
