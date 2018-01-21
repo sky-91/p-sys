@@ -4,7 +4,6 @@ import cn.qsky.policesys.common.data.PageData;
 import cn.qsky.policesys.facade.group.data.GroupRecordData;
 import cn.qsky.policesys.facade.group.data.GroupRecordPageQueryData;
 import cn.qsky.policesys.facade.group.data.GroupSummaryData;
-import java.util.List;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
@@ -63,9 +62,11 @@ public interface GroupFacade {
   /**
    * 获取所有的群体汇总信息
    *
-   * @return list
+   * @param pageNum pageNum
+   * @param pageSize pageSize
+   * @return PageData
    */
-  List<GroupSummaryData> listAllGroupSummary();
+  PageData<GroupSummaryData> listGroupSummaryForPage(final Integer pageNum, final Integer pageSize);
 
   /**
    * 分页数据查询

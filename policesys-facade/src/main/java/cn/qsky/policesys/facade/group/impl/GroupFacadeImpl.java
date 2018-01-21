@@ -88,8 +88,9 @@ public class GroupFacadeImpl implements GroupFacade {
   }
 
   @Override
-  public List<GroupSummaryData> listAllGroupSummary() {
-    return CglibBeanUtil.converterList(groupService.listAllGroupSummary(), GroupSummaryData.class);
+  public PageData<GroupSummaryData> listGroupSummaryForPage(Integer pageNum, Integer pageSize) {
+    return PageDataConverter.converter(groupService.listGroupSummaryForPage(pageNum, pageSize),
+        GroupSummaryData.class);
   }
 
   @Override

@@ -1,5 +1,6 @@
 package cn.qsky.policesys.web.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
@@ -37,6 +38,7 @@ public class SpecialPersonVO {
   private Date activityTime;
 
   @ApiModelProperty(value = "推送时间")
+  @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
   private Date pushTime;
 
   @ApiModelProperty(value = "户籍地")

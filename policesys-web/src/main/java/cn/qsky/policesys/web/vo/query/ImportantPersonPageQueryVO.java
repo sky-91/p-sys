@@ -45,7 +45,7 @@ public class ImportantPersonPageQueryVO {
   private Byte endAge;
 
   @ApiModelProperty(value = "页码")
-  private Integer pageNum;
+  private Integer pageNumber;
 
   @ApiModelProperty(value = "每页条数")
   private Integer pageSize;
@@ -138,12 +138,12 @@ public class ImportantPersonPageQueryVO {
     this.endAge = endAge;
   }
 
-  public Integer getPageNum() {
-    return pageNum;
+  public Integer getPageNumber() {
+    return pageNumber;
   }
 
-  public void setPageNum(Integer pageNum) {
-    this.pageNum = pageNum;
+  public void setPageNumber(Integer pageNumber) {
+    this.pageNumber = pageNumber;
   }
 
   public Integer getPageSize() {

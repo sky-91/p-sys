@@ -73,25 +73,25 @@ public class GroupBuilderImpl implements GroupBuilder {
             record.setScore(Byte.valueOf(row.getCell(1).getStringCellValue()));
           }
         }
-        if (row.getCell(2) != null && row.getCell(3) != null && row.getCell(4) != null) {
+        if (row.getCell(3) != null && row.getCell(4) != null && row.getCell(5) != null) {
           createDate(record, row);
-        }
-        if (row.getCell(5) != null) {
-          row.getCell(5).setCellType(CellType.STRING);
-          if (StringUtils.isNotBlank(row.getCell(5).getStringCellValue())) {
-            record.setPetitionLocation(row.getCell(5).getStringCellValue());
-          }
         }
         if (row.getCell(6) != null) {
           row.getCell(6).setCellType(CellType.STRING);
           if (StringUtils.isNotBlank(row.getCell(6).getStringCellValue())) {
-            record.setPetitionRegion(row.getCell(6).getStringCellValue());
+            record.setPetitionLocation(row.getCell(6).getStringCellValue());
           }
         }
         if (row.getCell(7) != null) {
           row.getCell(7).setCellType(CellType.STRING);
           if (StringUtils.isNotBlank(row.getCell(7).getStringCellValue())) {
-            record.setInciteMethod(row.getCell(7).getStringCellValue());
+            record.setPetitionRegion(row.getCell(7).getStringCellValue());
+          }
+        }
+        if (row.getCell(8) != null) {
+          row.getCell(8).setCellType(CellType.STRING);
+          if (StringUtils.isNotBlank(row.getCell(8).getStringCellValue())) {
+            record.setInciteMethod(row.getCell(8).getStringCellValue());
           }
         }
         if (row.getCell(9) != null) {
@@ -151,12 +151,12 @@ public class GroupBuilderImpl implements GroupBuilder {
   }
 
   private void createDate(GroupRecordData record, Row row) {
-    row.getCell(2).setCellType(CellType.NUMERIC);
     row.getCell(3).setCellType(CellType.NUMERIC);
     row.getCell(4).setCellType(CellType.NUMERIC);
+    row.getCell(5).setCellType(CellType.NUMERIC);
     record.setRecordDate(DateUtil
-        .setPointDate((new Double(row.getCell(2).getNumericCellValue())).intValue(),
-            (new Double(row.getCell(3).getNumericCellValue())).intValue(),
-            (new Double(row.getCell(4).getNumericCellValue())).intValue()));
+        .setPointDate((new Double(row.getCell(3).getNumericCellValue())).intValue(),
+            (new Double(row.getCell(4).getNumericCellValue())).intValue(),
+            (new Double(row.getCell(5).getNumericCellValue())).intValue()));
   }
 }

@@ -23,7 +23,7 @@ public class GroupRecordPageQueryData {
 
   private String infoSources;
 
-  private Integer pageNum;
+  private Integer pageNumber;
 
   private Integer pageSize;
 
@@ -83,12 +83,12 @@ public class GroupRecordPageQueryData {
     this.infoSources = infoSources;
   }
 
-  public Integer getPageNum() {
-    return pageNum;
+  public Integer getPageNumber() {
+    return pageNumber;
   }
 
-  public void setPageNum(Integer pageNum) {
-    this.pageNum = pageNum;
+  public void setPageNumber(Integer pageNumber) {
+    this.pageNumber = pageNumber;
   }
 
   public Integer getPageSize() {

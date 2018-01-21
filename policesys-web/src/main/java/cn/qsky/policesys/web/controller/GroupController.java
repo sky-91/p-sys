@@ -3,25 +3,24 @@ package cn.qsky.policesys.web.controller;
 import cn.qsky.policesys.common.util.CglibBeanUtil;
 import cn.qsky.policesys.common.vo.PageVO;
 import cn.qsky.policesys.common.vo.PageVOConverter;
-import cn.qsky.policesys.core.dto.GroupRecordPageQueryDTO;
 import cn.qsky.policesys.facade.group.GroupFacade;
 import cn.qsky.policesys.facade.group.data.GroupRecordData;
 import cn.qsky.policesys.facade.group.data.GroupRecordPageQueryData;
 import cn.qsky.policesys.facade.group.data.GroupSummaryData;
 import cn.qsky.policesys.web.vo.GroupRecordVO;
 import cn.qsky.policesys.web.vo.GroupSummaryVO;
+import cn.qsky.policesys.web.vo.query.GroupRecordPageQueryVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.util.List;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.hibernate.validator.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,13 +29,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author qsky on 18/1/7
  */
 @Api(description = "活动群体接口")
-@Controller
+@RestController
 @RequestMapping("group")
 public class GroupController {
 
@@ -75,9 +75,16 @@ public class GroupController {
   }
 
   @ApiOperation(value = "群体汇总信息列表", notes = "群体汇总信息列表")
-  @GetMapping(value = "GroupSummary/listAll")
-  public List<GroupSummaryVO> listGroupSummary() {
-    return CglibBeanUtil.converterList(groupFacade.listAllGroupSummary(), GroupSummaryVO.class);
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "pageNumber", value = "当前页码", paramType = "query", dataType = "Integer", required = true),
+      @ApiImplicitParam(name = "pageSize", value = "每页显示多少条", paramType = "query", dataType = "Integer", required = true)
+  })
+  @GetMapping(value = "GroupSummary/listForPage")
+  public PageVO<GroupSummaryVO> listGroupSummary(
+      @RequestParam(name = "pageNumber") final Integer pageNumber,
+      @RequestParam(name = "pageSize") final Integer pageSize) {
+    return PageVOConverter.converter(groupFacade.listGroupSummaryForPage(pageNumber, pageSize),
+        GroupSummaryVO.class);
   }
 
   @ApiOperation(value = "根据群体名称获取群体活动记录", notes = "根据群体名称获取群体活动记录")
@@ -113,9 +120,9 @@ public class GroupController {
   @ApiParam(name = "groupRecordPageQueryDTO", value = "groupRecordPageQueryDTO", required = true)
   @GetMapping(value = "groupRecord/listForPage")
   public PageVO<GroupRecordVO> listGroupRecord(
-      @Valid @RequestBody final GroupRecordPageQueryDTO groupRecordPageQueryDTO) {
+      @Valid final GroupRecordPageQueryVO groupRecordPageQueryVO) {
     return PageVOConverter.converter(groupFacade.listGroupRecordForPage(CglibBeanUtil
-            .copyProperties(groupRecordPageQueryDTO, GroupRecordPageQueryData.class)),
+            .copyProperties(groupRecordPageQueryVO, GroupRecordPageQueryData.class)),
         GroupRecordVO.class);
   }
 

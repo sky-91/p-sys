@@ -43,6 +43,7 @@
     FROM
     special_person
     WHERE
+    delete_flag = 0
     <choose>
       <when test="startActivityTime == null and endActivityTime != null">
         and activity_time &lt;= #{endActivityTime,jdbcType=TIMESTAMP}
@@ -73,6 +74,5 @@
     <if test="personType != null">
       and person_type = #{personType,jdbcType=BIT}
     </if>
-    and delete_flag = 0
   </select>
 </mapper>

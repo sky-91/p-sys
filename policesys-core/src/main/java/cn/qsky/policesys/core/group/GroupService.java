@@ -4,7 +4,6 @@ import cn.qsky.policesys.core.dao.model.GroupRecordModel;
 import cn.qsky.policesys.core.dao.model.GroupSummaryModel;
 import cn.qsky.policesys.core.dto.GroupRecordPageQueryDTO;
 import com.github.pagehelper.Page;
-import java.util.List;
 
 /**
  * @author qsky on 18/1/7
@@ -68,11 +67,13 @@ public interface GroupService {
   int updateGroupRecord(final GroupRecordModel groupRecordModel);
 
   /**
-   * 获取所有的群体汇总信息
+   * 分页获取群体汇总信息
    *
-   * @return list
+   * @param pageNum pageNum
+   * @param pageSize pageSize
+   * @return Page
    */
-  List<GroupSummaryModel> listAllGroupSummary();
+  Page<GroupSummaryModel> listGroupSummaryForPage(final Integer pageNum, final Integer pageSize);
 
   /**
    * 分页数据查询

@@ -34,7 +34,7 @@ public class GroupRecordPageQueryVO {
   private String infoSources;
 
   @ApiModelProperty(value = "页码")
-  private Integer pageNum;
+  private Integer pageNumber;
 
   @ApiModelProperty(value = "每页大小")
   private Integer pageSize;
@@ -95,12 +95,12 @@ public class GroupRecordPageQueryVO {
     this.infoSources = infoSources;
   }
 
-  public Integer getPageNum() {
-    return pageNum;
+  public Integer getPageNumber() {
+    return pageNumber;
   }
 
-  public void setPageNum(Integer pageNum) {
-    this.pageNum = pageNum;
+  public void setPageNumber(Integer pageNumber) {
+    this.pageNumber = pageNumber;
   }
 
   public Integer getPageSize() {

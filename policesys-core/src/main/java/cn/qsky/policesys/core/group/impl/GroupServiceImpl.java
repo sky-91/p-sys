@@ -84,15 +84,18 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
-  public List<GroupSummaryModel> listAllGroupSummary() {
-    return groupSummaryMapper.selectByExample(new GroupSummaryModelExample());
+  public Page<GroupSummaryModel> listGroupSummaryForPage(Integer pageNum,
+      Integer pageSize) {
+    Page<GroupSummaryModel> page = PageHelper.startPage(pageNum, pageSize)
+        .doSelectPage(() -> groupSummaryMapper.selectByExample(new GroupSummaryModelExample()));
+    return page;
   }
 
   @Override
   public Page<GroupRecordModel> listGroupRecordForPage(
       GroupRecordPageQueryDTO groupRecordPageQueryDTO) {
     Page<GroupRecordModel> page = PageHelper
-        .startPage(groupRecordPageQueryDTO.getPageNum(),
+        .startPage(groupRecordPageQueryDTO.getPageNumber(),
             groupRecordPageQueryDTO.getPageSize()).doSelectPage(
             () -> groupRecordMapper.listGroupRecordForPage(groupRecordPageQueryDTO));
     return page;

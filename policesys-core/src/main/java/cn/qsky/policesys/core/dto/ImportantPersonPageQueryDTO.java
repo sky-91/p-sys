@@ -30,7 +30,7 @@ public class ImportantPersonPageQueryDTO {
 
   private Byte endAge;
 
-  private Integer pageNum;
+  private Integer pageNumber;
 
   private Integer pageSize;
 
@@ -122,12 +122,12 @@ public class ImportantPersonPageQueryDTO {
     this.endAge = endAge;
   }
 
-  public Integer getPageNum() {
-    return pageNum;
+  public Integer getPageNumber() {
+    return pageNumber;
   }
 
-  public void setPageNum(Integer pageNum) {
-    this.pageNum = pageNum;
+  public void setPageNumber(Integer pageNumber) {
+    this.pageNumber = pageNumber;
   }
 
   public Integer getPageSize() {
