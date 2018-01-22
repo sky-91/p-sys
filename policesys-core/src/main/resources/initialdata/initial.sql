@@ -248,3 +248,7 @@ CREATE TABLE `group_summary` (
 --     SUM(group_score) AS total_score, CONCAT (FORMAT(group_score*100/total_score,2), '%') AS activity
 --     FROM group_summary AS gs JOIN group_record AS gr
 --     WHERE gs.group_name = gr.group_name GROUP BY gr.group_name;
+
+INSERT INTO `user` VALUES (1,'2018-01-08 11:00:00.123','2018-01-08 11:00:00.123','admin','wyhND5RgbeH9KvFyq6Fb8w==','张三','100100200010101234','13113113113',NULL,NULL,NULL,0);
+INSERT INTO `role` VALUES (1,'2018-01-08 11:00:00.123','2018-01-08 11:00:00.123','adminGroup','管理员',NULL,NULL,NULL,0);
+INSERT INTO `user_to_role` VALUES (1,'2018-01-08 11:00:00.123','2018-01-08 11:00:00.123','1','1',NULL,NULL,NULL);
