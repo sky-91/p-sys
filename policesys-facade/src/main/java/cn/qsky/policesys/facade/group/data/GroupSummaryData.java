@@ -1,12 +1,17 @@
 package cn.qsky.policesys.facade.group.data;
 
+import java.util.List;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.dozer.Mapping;
 
 /**
  * @author qsky on 18/1/7
  */
 public class GroupSummaryData {
+
+  @Mapping("ext1")
+  private String index;
 
   private String groupName;
 
@@ -15,6 +20,16 @@ public class GroupSummaryData {
   private String groupIntroduce;
 
   private Boolean deleteFlag;
+
+  private List<GroupRecordData> records;
+
+  public String getIndex() {
+    return index;
+  }
+
+  public void setIndex(String index) {
+    this.index = index;
+  }
 
   public String getGroupName() {
     return groupName;
@@ -46,6 +61,14 @@ public class GroupSummaryData {
 
   public void setDeleteFlag(Boolean deleteFlag) {
     this.deleteFlag = deleteFlag;
+  }
+
+  public List<GroupRecordData> getRecords() {
+    return records;
+  }
+
+  public void setRecords(List<GroupRecordData> records) {
+    this.records = records;
   }
 
   @Override

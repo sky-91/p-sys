@@ -24,6 +24,7 @@
     <result column="work_status" jdbcType="CHAR" property="workStatus"/>
     <result column="controll_reason" jdbcType="VARCHAR" property="controllReason"/>
     <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    <result column="ext1" jdbcType="VARCHAR" property="ext1"/>
     <collection property="contacts" columnPrefix="c_"
       ofType="cn.qsky.policesys.core.dao.model.PersonContactInfoModel">
       <result column="phone" jdbcType="VARCHAR" property="phone"/>
@@ -39,7 +40,7 @@
     i.residence AS residence, i.jurisdiction AS jurisdiction, i.juri_police AS juri_police,
     i.education AS education, i.veteran_status AS veteran_status, i.job AS job, i.work_place AS work_place,
     i.work_status AS work_status, i.controll_reason AS controll_reason, i.remark AS remark,
-    i.delete_flag AS delete_flag,
+    i.delete_flag AS delete_flag, i.ext1 AS ext1
     pc.phone AS c_phone, pc.wechat_name AS c_wechat_name
     FROM
     important_person_info AS i

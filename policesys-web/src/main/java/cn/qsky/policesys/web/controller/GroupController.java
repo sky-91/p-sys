@@ -1,6 +1,8 @@
 package cn.qsky.policesys.web.controller;
 
 import cn.qsky.policesys.common.util.CglibBeanUtil;
+import cn.qsky.policesys.common.util.DozerBeanMapperFactory;
+import cn.qsky.policesys.common.util.ExportExcelUtil;
 import cn.qsky.policesys.common.vo.PageVO;
 import cn.qsky.policesys.common.vo.PageVOConverter;
 import cn.qsky.policesys.facade.group.GroupFacade;
@@ -15,9 +17,15 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.dozer.DozerBeanMapper;
 import org.hibernate.validator.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +49,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class GroupController {
 
   private static final Logger LOG = LoggerFactory.getLogger(GroupController.class);
+  private static DozerBeanMapper mapper = DozerBeanMapperFactory.getMapper();
 
   @Resource
   private GroupFacade groupFacade;
@@ -50,8 +59,7 @@ public class GroupController {
   @GetMapping("groupSummary/getByName/{groupName}")
   public GroupSummaryVO getGroupSummary(
       @NotBlank @PathVariable(name = "groupName") final String groupName) {
-    return CglibBeanUtil
-        .copyProperties(groupFacade.getGroupSummary(groupName), GroupSummaryVO.class);
+    return mapper.map(groupFacade.getGroupSummary(groupName), GroupSummaryVO.class);
   }
 
   @ApiOperation(value = "保存群体汇总信息", notes = "保存接口")
@@ -76,24 +84,33 @@ public class GroupController {
 
   @ApiOperation(value = "群体汇总信息列表", notes = "群体汇总信息列表")
   @ApiImplicitParams({
+      @ApiImplicitParam(name = "groupName", value = "群体名称", paramType = "query", dataType = "String"),
+      @ApiImplicitParam(name = "groupType", value = "群体类别", paramType = "query", dataType = "String"),
       @ApiImplicitParam(name = "pageNumber", value = "当前页码", paramType = "query", dataType = "Integer", required = true),
       @ApiImplicitParam(name = "pageSize", value = "每页显示多少条", paramType = "query", dataType = "Integer", required = true)
   })
   @GetMapping(value = "GroupSummary/listForPage")
   public PageVO<GroupSummaryVO> listGroupSummary(
+      @RequestParam(name = "groupName", required = false) final String groupName,
+      @RequestParam(name = "groupType", required = false) final String groupType,
       @RequestParam(name = "pageNumber") final Integer pageNumber,
       @RequestParam(name = "pageSize") final Integer pageSize) {
-    return PageVOConverter.converter(groupFacade.listGroupSummaryForPage(pageNumber, pageSize),
-        GroupSummaryVO.class);
+    Map<String, Object> queryMap = new HashMap<>(16);
+    queryMap.put("groupName", groupName);
+    queryMap.put("groupType", groupType);
+    return PageVOConverter
+        .converter(groupFacade.listGroupSummaryForPage(queryMap, pageNumber, pageSize),
+            GroupSummaryVO.class);
   }
 
+  @Deprecated
   @ApiOperation(value = "根据群体名称获取群体活动记录", notes = "根据群体名称获取群体活动记录")
   @ApiImplicitParam(name = "groupName", value = "群体名称", required = true, dataType = "String", paramType = "path")
   @GetMapping("groupRecord/getByName/{groupName}")
-  public GroupRecordVO getGroupRecord(
+  public List<GroupRecordVO> getGroupRecord(
       @NotBlank @PathVariable(name = "groupName") final String groupName) {
     return CglibBeanUtil
-        .copyProperties(groupFacade.getGroupRecord(groupName), GroupRecordVO.class);
+        .converterList(groupFacade.getGroupRecord(groupName), GroupRecordVO.class);
   }
 
   @ApiOperation(value = "保存群体活动记录", notes = "保存接口")
@@ -141,7 +158,7 @@ public class GroupController {
     return true;
   }
 
-  @ApiOperation(value = "文件导入重点人员活动轨迹", notes = "导入文件")
+  @ApiOperation(value = "文件导入群体活动记录", notes = "导入文件")
   @PostMapping(value = "record/upload")
   public @ResponseBody
   Boolean importRecord(@RequestParam("file") MultipartFile file) {
@@ -154,5 +171,34 @@ public class GroupController {
       }
     }
     return true;
+  }
+
+  @ApiOperation(value = "导出群体汇总信息EXCEL", notes = "导出群体汇总信息EXCEL")
+  @GetMapping(value = "GroupSummary/export")
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "groupName", value = "群体名称", paramType = "query", dataType = "String"),
+      @ApiImplicitParam(name = "groupType", value = "群体类别", paramType = "query", dataType = "String")
+  })
+  public void exportGroupSummary(
+      @RequestParam(name = "groupName", required = false) final String groupName,
+      @RequestParam(name = "groupType", required = false) final String groupType,
+      HttpServletResponse response) {
+    Map<String, Object> queryMap = new HashMap<>(16);
+    queryMap.put("groupName", groupName);
+    queryMap.put("groupType", groupType);
+    HSSFWorkbook book = groupFacade.exportGroupSummary(queryMap, 0, 99999999);
+    ExportExcelUtil.generateExcelResponse("群体汇总信息表", book, response);
+  }
+
+  @ApiOperation(value = "导出群体活动记录EXCEL", notes = "导出群体活动记录EXCEL")
+  @GetMapping(value = "groupRecord/export")
+  @ApiParam(name = "groupRecordPageQueryDTO", value = "groupRecordPageQueryDTO", required = true)
+  public void exportGroupRecord(@Valid final GroupRecordPageQueryVO groupRecordPageQueryVO,
+      HttpServletResponse response) {
+    groupRecordPageQueryVO.setPageNumber(0);
+    groupRecordPageQueryVO.setPageSize(99999999);
+    HSSFWorkbook book = groupFacade.exportGroupRecord(
+        CglibBeanUtil.copyProperties(groupRecordPageQueryVO, GroupRecordPageQueryData.class));
+    ExportExcelUtil.generateExcelResponse("群体活动记录表", book, response);
   }
 }

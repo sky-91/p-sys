@@ -1,8 +1,11 @@
 package cn.qsky.policesys.facade.group;
 
+import cn.qsky.policesys.core.dao.model.GroupRecordModel;
+import cn.qsky.policesys.core.dao.model.GroupSummaryModel;
 import cn.qsky.policesys.facade.group.data.GroupRecordData;
 import cn.qsky.policesys.facade.group.data.GroupSummaryData;
 import java.util.List;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
@@ -25,4 +28,20 @@ public interface GroupBuilder {
    * @return list
    */
   List<GroupRecordData> buildRecordList(Workbook workbook);
+
+  /**
+   * 填充重点人员excel
+   *
+   * @param modelList modelList
+   * @return HSSFWorkbook HSSFWorkbook
+   */
+  HSSFWorkbook fillSummaryBook(List<GroupSummaryModel> modelList);
+
+  /**
+   * 填充重点人员excel
+   *
+   * @param modelList modelList
+   * @return HSSFWorkbook HSSFWorkbook
+   */
+  HSSFWorkbook fillRecordBook(List<GroupRecordModel> modelList);
 }

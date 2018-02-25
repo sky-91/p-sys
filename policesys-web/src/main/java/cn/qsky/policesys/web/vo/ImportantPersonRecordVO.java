@@ -42,7 +42,7 @@ public class ImportantPersonRecordVO {
   @ApiModelProperty(value = "是否落实")
   private Boolean confirm;
 
-  @ApiModelProperty(value = "煽动方式")
+  @ApiModelProperty(value = "轨迹类型")
   private String inciteMethod;
 
   @ApiModelProperty(value = "信息来源")

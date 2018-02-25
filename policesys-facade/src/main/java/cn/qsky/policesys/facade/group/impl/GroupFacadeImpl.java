@@ -3,6 +3,7 @@ package cn.qsky.policesys.facade.group.impl;
 import cn.qsky.policesys.common.data.PageData;
 import cn.qsky.policesys.common.data.PageDataConverter;
 import cn.qsky.policesys.common.util.CglibBeanUtil;
+import cn.qsky.policesys.common.util.DozerBeanMapperFactory;
 import cn.qsky.policesys.core.dao.model.GroupRecordModel;
 import cn.qsky.policesys.core.dao.model.GroupSummaryModel;
 import cn.qsky.policesys.core.dto.GroupRecordPageQueryDTO;
@@ -13,9 +14,12 @@ import cn.qsky.policesys.facade.group.data.GroupRecordData;
 import cn.qsky.policesys.facade.group.data.GroupRecordPageQueryData;
 import cn.qsky.policesys.facade.group.data.GroupSummaryData;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.Resource;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -28,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class GroupFacadeImpl implements GroupFacade {
 
   private static final Logger LOG = LoggerFactory.getLogger(GroupFacadeImpl.class);
+  private static DozerBeanMapper mapper = DozerBeanMapperFactory.getMapper();
 
   @Resource
   private GroupService groupService;
@@ -37,15 +42,17 @@ public class GroupFacadeImpl implements GroupFacade {
 
   @Override
   public GroupSummaryData getGroupSummary(String groupName) {
-    return CglibBeanUtil
+    GroupSummaryData groupSummaryData = CglibBeanUtil
         .copyProperties(groupService.getGroupSummary(groupName), GroupSummaryData.class);
+    groupSummaryData.setRecords(
+        CglibBeanUtil.converterList(groupService.getGroupRecord(groupName), GroupRecordData.class));
+    return groupSummaryData;
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Boolean saveGroupSummary(GroupSummaryData groupSummaryData) {
-    if (groupService.saveGroupSummary(CglibBeanUtil.copyProperties(groupSummaryData,
-        GroupSummaryModel.class)) == 1) {
+    if (groupService.saveGroupSummary(mapper.map(groupSummaryData, GroupSummaryModel.class)) == 1) {
       return true;
     }
     return false;
@@ -54,24 +61,23 @@ public class GroupFacadeImpl implements GroupFacade {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Boolean updateGroupSummary(GroupSummaryData groupSummaryData) {
-    if (groupService.updateGroupSummary(CglibBeanUtil.copyProperties(groupSummaryData,
-        GroupSummaryModel.class)) == 1) {
+    if (groupService.updateGroupSummary(mapper.map(groupSummaryData, GroupSummaryModel.class))
+        == 1) {
       return true;
     }
     return false;
   }
 
   @Override
-  public GroupRecordData getGroupRecord(String groupName) {
+  public List<GroupRecordData> getGroupRecord(String groupName) {
     return CglibBeanUtil
-        .copyProperties(groupService.getGroupRecord(groupName), GroupRecordData.class);
+        .converterList(groupService.getGroupRecord(groupName), GroupRecordData.class);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Boolean saveGroupRecord(GroupRecordData groupRecordData) {
-    if (groupService.saveGroupRecord(CglibBeanUtil.copyProperties(groupRecordData,
-        GroupRecordModel.class)) == 1) {
+    if (groupService.saveGroupRecord(mapper.map(groupRecordData, GroupRecordModel.class)) == 1) {
       return true;
     }
     return false;
@@ -80,17 +86,18 @@ public class GroupFacadeImpl implements GroupFacade {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Boolean updateGroupRecord(GroupRecordData groupRecordData) {
-    if (groupService.updateGroupRecord(CglibBeanUtil.copyProperties(groupRecordData,
-        GroupRecordModel.class)) == 1) {
+    if (groupService.updateGroupRecord(mapper.map(groupRecordData, GroupRecordModel.class)) == 1) {
       return true;
     }
     return false;
   }
 
   @Override
-  public PageData<GroupSummaryData> listGroupSummaryForPage(Integer pageNum, Integer pageSize) {
-    return PageDataConverter.converter(groupService.listGroupSummaryForPage(pageNum, pageSize),
-        GroupSummaryData.class);
+  public PageData<GroupSummaryData> listGroupSummaryForPage(Map<String, Object> queryMap,
+      Integer pageNum, Integer pageSize) {
+    return PageDataConverter
+        .converter(groupService.listGroupSummaryForPage(queryMap, pageNum, pageSize),
+            GroupSummaryData.class);
   }
 
   @Override
@@ -137,5 +144,20 @@ public class GroupFacadeImpl implements GroupFacade {
       }
     }
     return true;
+  }
+
+  @Override
+  public HSSFWorkbook exportGroupSummary(Map<String, Object> queryMap, Integer pageNum,
+      Integer pageSize) {
+    return groupBuilder
+        .fillSummaryBook(
+            groupService.listGroupSummaryForPage(queryMap, pageNum, pageSize).getResult());
+  }
+
+  @Override
+  public HSSFWorkbook exportGroupRecord(GroupRecordPageQueryData groupRecordPageQueryData) {
+    return groupBuilder.fillRecordBook(groupService.listGroupRecordForPage(
+        CglibBeanUtil.copyProperties(groupRecordPageQueryData, GroupRecordPageQueryDTO.class))
+        .getResult());
   }
 }

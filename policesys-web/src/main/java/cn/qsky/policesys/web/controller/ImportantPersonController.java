@@ -2,19 +2,26 @@ package cn.qsky.policesys.web.controller;
 
 import cn.qsky.policesys.common.util.CglibBeanUtil;
 import cn.qsky.policesys.common.util.DozerBeanMapperFactory;
+import cn.qsky.policesys.common.util.ExportExcelUtil;
 import cn.qsky.policesys.common.vo.PageVO;
 import cn.qsky.policesys.common.vo.PageVOConverter;
 import cn.qsky.policesys.facade.person.ImportantPersonFacade;
 import cn.qsky.policesys.facade.person.data.ImportantPersonInfoData;
 import cn.qsky.policesys.facade.person.data.ImportantPersonPageQueryData;
+import cn.qsky.policesys.facade.person.data.ImportantPersonRecordData;
+import cn.qsky.policesys.facade.person.data.ImportantRecordPageQueryData;
 import cn.qsky.policesys.web.vo.ImportantPersonInfoVO;
+import cn.qsky.policesys.web.vo.ImportantPersonRecordVO;
 import cn.qsky.policesys.web.vo.query.ImportantPersonPageQueryVO;
+import cn.qsky.policesys.web.vo.query.ImportantRecordPageQueryVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.dozer.DozerBeanMapper;
 import org.hibernate.validator.constraints.NotBlank;
@@ -50,9 +57,8 @@ public class ImportantPersonController {
   @GetMapping("getById/{idCard}")
   public ImportantPersonInfoVO getImportantPersonInfo(
       @NotBlank @PathVariable(name = "idCard") final String idCard) {
-    return CglibBeanUtil
-        .copyProperties(importantPersonFacade.getImportantPersonInfo(idCard),
-            ImportantPersonInfoVO.class);
+    return mapper
+        .map(importantPersonFacade.getImportantPersonInfo(idCard), ImportantPersonInfoVO.class);
   }
 
   @ApiOperation(value = "保存重点人员信息", notes = "保存接口")
@@ -77,7 +83,7 @@ public class ImportantPersonController {
   }
 
   @ApiOperation(value = "重点人员清单列表", notes = "分页显示重点人员清单")
-  @ApiParam(name = "importantPersonInfoVO", value = "importantPersonInfoVO", required = true)
+  @ApiParam(name = "importantPersonPageQueryVO", value = "importantPersonPageQueryVO", required = true)
   @GetMapping(value = "listForPage")
   public PageVO<ImportantPersonInfoVO> listImportantPerson(
       @Valid final ImportantPersonPageQueryVO importantPersonPageQueryVO) {
@@ -102,6 +108,38 @@ public class ImportantPersonController {
     return true;
   }
 
+  @ApiOperation(value = "保存人员积分轨迹信息", notes = "保存接口")
+  @ApiParam(name = "importantPersonRecordVO", value = "importantPersonRecordVO", required = true)
+  @PostMapping("record/save")
+  public Boolean saveImportantRecord(
+      @Valid @RequestBody final ImportantPersonRecordVO importantPersonRecordVO) {
+    LOG.debug(importantPersonRecordVO.toString());
+    return importantPersonFacade
+        .saveImportantPersonRecord(mapper.map(importantPersonRecordVO,
+            ImportantPersonRecordData.class));
+  }
+
+  @ApiOperation(value = "修改人员积分轨迹信息", notes = "修改接口")
+  @ApiParam(name = "importantPersonRecordVO", value = "importantPersonRecordVO", required = true)
+  @PutMapping("record/update")
+  public Boolean updateImportantRecord(
+      @Valid @RequestBody final ImportantPersonRecordVO importantPersonRecordVO) {
+    LOG.debug(importantPersonRecordVO.toString());
+    return importantPersonFacade
+        .updateImportantPersonRecord(mapper.map(importantPersonRecordVO,
+            ImportantPersonRecordData.class));
+  }
+
+  @ApiOperation(value = "重点人员积分轨迹清单列表", notes = "分页显示重点人员积分轨迹清单")
+  @ApiParam(name = "importantRecordPageQueryVO", value = "importantRecordPageQueryVO", required = true)
+  @GetMapping(value = "record/listForPage")
+  public PageVO<ImportantPersonRecordVO> listImportantRecord(
+      @Valid final ImportantRecordPageQueryVO importantRecordPageQueryVO) {
+    return PageVOConverter.converter(importantPersonFacade.listImportantRecordForPage(CglibBeanUtil
+            .copyProperties(importantRecordPageQueryVO, ImportantRecordPageQueryData.class)),
+        ImportantPersonRecordVO.class);
+  }
+
   @ApiOperation(value = "文件导入重点人员活动轨迹", notes = "导入文件")
   @PostMapping(value = "record/upload")
   public @ResponseBody
@@ -116,5 +154,31 @@ public class ImportantPersonController {
       }
     }
     return true;
+  }
+
+  @ApiOperation(value = "导出重点人员EXCEL", notes = "导出重点人员EXCEL")
+  @ApiParam(name = "importantPersonInfoVO", value = "importantPersonInfoVO", required = true)
+  @GetMapping(value = "export")
+  public void exportImportantPerson(
+      @Valid final ImportantPersonPageQueryVO importantPersonPageQueryVO,
+      HttpServletResponse response) {
+    importantPersonPageQueryVO.setPageNumber(0);
+    importantPersonPageQueryVO.setPageSize(99999999);
+    HSSFWorkbook book = importantPersonFacade.exportImportantPerson(CglibBeanUtil
+        .copyProperties(importantPersonPageQueryVO, ImportantPersonPageQueryData.class));
+    ExportExcelUtil.generateExcelResponse("重点人员底库表", book, response);
+  }
+
+  @ApiOperation(value = "导出重点人员积分轨迹EXCEL", notes = "导出重点人员积分轨迹EXCEL")
+  @ApiParam(name = "importantPersonInfoVO", value = "importantPersonInfoVO", required = true)
+  @GetMapping(value = "record/export")
+  public void exportImportantRecord(
+      @Valid final ImportantRecordPageQueryVO importantRecordPageQueryVO,
+      HttpServletResponse response) {
+    importantRecordPageQueryVO.setPageNumber(0);
+    importantRecordPageQueryVO.setPageSize(99999999);
+    HSSFWorkbook book = importantPersonFacade.exportImportantRecord(CglibBeanUtil
+        .copyProperties(importantRecordPageQueryVO, ImportantRecordPageQueryData.class));
+    ExportExcelUtil.generateExcelResponse("重点人员底库表", book, response);
   }
 }

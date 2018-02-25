@@ -3,11 +3,15 @@ package cn.qsky.policesys.facade.group.data;
 import java.util.Date;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.dozer.Mapping;
 
 /**
  * @author qsky on 18/1/7
  */
 public class GroupRecordData {
+
+  @Mapping("ext1")
+  private String index;
 
   private String groupName;
 
@@ -38,6 +42,14 @@ public class GroupRecordData {
   private String petitionSituation;
 
   private Boolean deleteFlag;
+
+  public String getIndex() {
+    return index;
+  }
+
+  public void setIndex(String index) {
+    this.index = index;
+  }
 
   public String getGroupName() {
     return groupName;

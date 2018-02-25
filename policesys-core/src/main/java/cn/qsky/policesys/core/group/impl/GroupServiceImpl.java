@@ -12,6 +12,7 @@ import cn.qsky.policesys.core.group.GroupService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.Resource;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -62,15 +63,11 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
-  public GroupRecordModel getGroupRecord(String groupName) {
+  public List<GroupRecordModel> getGroupRecord(String groupName) {
     GroupRecordModelExample example = new GroupRecordModelExample();
-    example.or().andGroupNameEqualTo(groupName);
-    List<GroupRecordModel> list = groupRecordMapper.selectByExample(example);
-    if (CollectionUtils.isNotEmpty(list)) {
-      return list.get(0);
-    } else {
-      throw new SourceNotFoundException();
-    }
+    example.createCriteria().andGroupNameEqualTo(groupName);
+    example.setOrderByClause("recordDate desc");
+    return groupRecordMapper.selectByExample(example);
   }
 
   @Override
@@ -84,10 +81,10 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
-  public Page<GroupSummaryModel> listGroupSummaryForPage(Integer pageNum,
-      Integer pageSize) {
+  public Page<GroupSummaryModel> listGroupSummaryForPage(Map<String, Object> queryMap,
+      Integer pageNum, Integer pageSize) {
     Page<GroupSummaryModel> page = PageHelper.startPage(pageNum, pageSize)
-        .doSelectPage(() -> groupSummaryMapper.selectByExample(new GroupSummaryModelExample()));
+        .doSelectPage(() -> groupSummaryMapper.listGroupSummaryForPage(queryMap));
     return page;
   }
 

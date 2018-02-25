@@ -3,6 +3,9 @@ package cn.qsky.policesys.facade.person;
 import cn.qsky.policesys.common.data.PageData;
 import cn.qsky.policesys.facade.person.data.ImportantPersonInfoData;
 import cn.qsky.policesys.facade.person.data.ImportantPersonPageQueryData;
+import cn.qsky.policesys.facade.person.data.ImportantPersonRecordData;
+import cn.qsky.policesys.facade.person.data.ImportantRecordPageQueryData;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
@@ -12,6 +15,7 @@ public interface ImportantPersonFacade {
 
   /**
    * 根据身份证获取重点人员详细信息
+   * 获取所有的轨迹积分按时间倒序排列
    *
    * @param idCard 身份证
    * @return ImportantPersonInfoData
@@ -44,6 +48,31 @@ public interface ImportantPersonFacade {
       final ImportantPersonPageQueryData importantPersonPageQueryData);
 
   /**
+   * 保存重点人员底库
+   *
+   * @param importantPersonRecordData data
+   * @return boolean
+   */
+  Boolean saveImportantPersonRecord(final ImportantPersonRecordData importantPersonRecordData);
+
+  /**
+   * 更新重点人员底库
+   *
+   * @param importantPersonRecordData data
+   * @return boolean
+   */
+  Boolean updateImportantPersonRecord(final ImportantPersonRecordData importantPersonRecordData);
+
+  /**
+   * 分页数据查询
+   *
+   * @param importantRecordPageQueryData data
+   * @return Page
+   */
+  PageData<ImportantPersonRecordData> listImportantRecordForPage(
+      final ImportantRecordPageQueryData importantRecordPageQueryData);
+
+  /**
    * 文件导入重点人员底库
    *
    * @param workbook 文件
@@ -58,4 +87,22 @@ public interface ImportantPersonFacade {
    * @return boolean
    */
   Boolean uploadPersonRecord(Workbook workbook);
+
+  /**
+   * 导出重点人员EXCEL
+   *
+   * @param importantPersonPageQueryData data
+   * @return workbook
+   */
+  HSSFWorkbook exportImportantPerson(
+      final ImportantPersonPageQueryData importantPersonPageQueryData);
+
+  /**
+   * 导出重点人员积分轨迹EXCEL
+   *
+   * @param importantRecordPageQueryData data
+   * @return workbook
+   */
+  HSSFWorkbook exportImportantRecord(
+      final ImportantRecordPageQueryData importantRecordPageQueryData);
 }

@@ -7,13 +7,10 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
- * @author qsky on 18/1/7
+ * @author qsky on 2018/2/23
  */
-@ApiModel("GroupRecordPageQueryVO(群体活动记录查询条件)")
-public class GroupRecordPageQueryVO {
-
-  @ApiModelProperty(value = "群体名称")
-  private String groupName;
+@ApiModel("ImportantRecordPageQueryVO(人员轨迹积分查询条件)")
+public class ImportantRecordPageQueryVO {
 
   @ApiModelProperty(value = "开始日期")
   private Date startRecordDate;
@@ -21,31 +18,23 @@ public class GroupRecordPageQueryVO {
   @ApiModelProperty(value = "结束日期")
   private Date endRecordDate;
 
-  @ApiModelProperty(value = "上访地点")
-  private String petitionLocation;
+  @ApiModelProperty(value = "身份证号")
+  private String idCard;
 
-  @ApiModelProperty(value = "所属区域")
+  @ApiModelProperty(value = "上访区域")
   private String petitionRegion;
-
-  @ApiModelProperty(value = "轨迹类型")
-  private String inciteMethod;
 
   @ApiModelProperty(value = "信息来源")
   private String infoSources;
 
+  @ApiModelProperty(value = "轨迹类型")
+  private String inciteMethod;
+
   @ApiModelProperty(value = "页码")
   private Integer pageNumber;
 
-  @ApiModelProperty(value = "每页大小")
+  @ApiModelProperty(value = "每页条数")
   private Integer pageSize;
-
-  public String getGroupName() {
-    return groupName;
-  }
-
-  public void setGroupName(String groupName) {
-    this.groupName = groupName;
-  }
 
   public Date getStartRecordDate() {
     return startRecordDate;
@@ -63,12 +52,12 @@ public class GroupRecordPageQueryVO {
     this.endRecordDate = endRecordDate;
   }
 
-  public String getPetitionLocation() {
-    return petitionLocation;
+  public String getIdCard() {
+    return idCard;
   }
 
-  public void setPetitionLocation(String petitionLocation) {
-    this.petitionLocation = petitionLocation;
+  public void setIdCard(String idCard) {
+    this.idCard = idCard;
   }
 
   public String getPetitionRegion() {
@@ -79,20 +68,20 @@ public class GroupRecordPageQueryVO {
     this.petitionRegion = petitionRegion;
   }
 
-  public String getInciteMethod() {
-    return inciteMethod;
-  }
-
-  public void setInciteMethod(String inciteMethod) {
-    this.inciteMethod = inciteMethod;
-  }
-
   public String getInfoSources() {
     return infoSources;
   }
 
   public void setInfoSources(String infoSources) {
     this.infoSources = infoSources;
+  }
+
+  public String getInciteMethod() {
+    return inciteMethod;
+  }
+
+  public void setInciteMethod(String inciteMethod) {
+    this.inciteMethod = inciteMethod;
   }
 
   public Integer getPageNumber() {

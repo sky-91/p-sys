@@ -7,15 +7,19 @@ import cn.qsky.policesys.common.util.DozerBeanMapperFactory;
 import cn.qsky.policesys.core.dao.model.ImportantPersonInfoModel;
 import cn.qsky.policesys.core.dao.model.ImportantPersonRecordModel;
 import cn.qsky.policesys.core.dto.ImportantPersonPageQueryDTO;
+import cn.qsky.policesys.core.dto.ImportantRecordPageQueryDTO;
 import cn.qsky.policesys.core.person.ImportantPersonService;
 import cn.qsky.policesys.facade.person.ImportantPersonBuilder;
 import cn.qsky.policesys.facade.person.ImportantPersonFacade;
 import cn.qsky.policesys.facade.person.data.ImportantPersonInfoData;
 import cn.qsky.policesys.facade.person.data.ImportantPersonPageQueryData;
 import cn.qsky.policesys.facade.person.data.ImportantPersonRecordData;
+import cn.qsky.policesys.facade.person.data.ImportantRecordPageQueryData;
+import java.util.Comparator;
 import java.util.List;
 import javax.annotation.Resource;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
@@ -40,8 +44,15 @@ public class ImportantPersonFacadeImpl implements ImportantPersonFacade {
 
   @Override
   public ImportantPersonInfoData getImportantPersonInfo(String idCard) {
-    return CglibBeanUtil.copyProperties(importantPersonService.getImportantPersonInfo(idCard),
-        ImportantPersonInfoData.class);
+    ImportantPersonInfoModel infoModel = importantPersonService.getImportantPersonInfo(idCard);
+    List<ImportantPersonRecordModel> recordModelList = infoModel.getRecords();
+    recordModelList
+        .sort(Comparator.comparing(ImportantPersonRecordModel::getRecordDate).reversed());
+    ImportantPersonInfoData infoData = CglibBeanUtil
+        .copyProperties(infoModel, ImportantPersonInfoData.class);
+    infoData
+        .setRecords(CglibBeanUtil.converterList(recordModelList, ImportantPersonRecordData.class));
+    return infoData;
   }
 
   @Override
@@ -106,6 +117,41 @@ public class ImportantPersonFacadeImpl implements ImportantPersonFacade {
   }
 
   @Override
+  @Transactional(rollbackFor = Exception.class)
+  public Boolean saveImportantPersonRecord(
+      ImportantPersonRecordData importantPersonRecordData) {
+    if (importantPersonService
+        .saveImportantPersonRecord(CglibBeanUtil.copyProperties(importantPersonRecordData,
+            ImportantPersonRecordModel.class)) == 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public Boolean updateImportantPersonRecord(
+      ImportantPersonRecordData importantPersonRecordData) {
+    if (importantPersonService
+        .updateImportantPersonRecord(CglibBeanUtil.copyProperties(importantPersonRecordData,
+            ImportantPersonRecordModel.class)) == 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @Override
+  public PageData<ImportantPersonRecordData> listImportantRecordForPage(
+      ImportantRecordPageQueryData importantRecordPageQueryData) {
+    return PageDataConverter.converter(importantPersonService.listImportantRecordForPage(
+        CglibBeanUtil
+            .copyProperties(importantRecordPageQueryData, ImportantRecordPageQueryDTO.class)),
+        ImportantPersonRecordData.class);
+  }
+
+  @Override
   public Boolean uploadPersonInfo(Workbook workbook) {
     List<ImportantPersonInfoData> dataList = importantPersonBuilder.buildPersonInfoList(workbook);
     if (CollectionUtils.isNotEmpty(dataList)) {
@@ -143,5 +189,23 @@ public class ImportantPersonFacadeImpl implements ImportantPersonFacade {
       }
     }
     return true;
+  }
+
+  @Override
+  public HSSFWorkbook exportImportantPerson(
+      ImportantPersonPageQueryData importantPersonPageQueryData) {
+    return importantPersonBuilder.fillPersonInfoBook(importantPersonService
+        .listImportantPersonForPage(CglibBeanUtil
+            .copyProperties(importantPersonPageQueryData, ImportantPersonPageQueryDTO.class))
+        .getResult());
+  }
+
+  @Override
+  public HSSFWorkbook exportImportantRecord(
+      ImportantRecordPageQueryData importantRecordPageQueryData) {
+    return importantPersonBuilder.fillPersonRecordBook(importantPersonService
+        .listImportantRecordForPage(CglibBeanUtil
+            .copyProperties(importantRecordPageQueryData, ImportantRecordPageQueryDTO.class))
+        .getResult());
   }
 }

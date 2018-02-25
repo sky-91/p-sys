@@ -32,6 +32,7 @@
     <result column="check_site" jdbcType="VARCHAR" property="checkSite"/>
     <result column="check_police" jdbcType="VARCHAR" property="checkPolice"/>
     <result column="delete_flag" jdbcType="BIT" property="deleteFlag"/>
+    <result column="ext1" jdbcType="VARCHAR" property="ext1"/>
   </resultMap>
   <select id="listSpecialPersonForPage" resultMap="SpecialPersonResultMap">
     SELECT
@@ -39,7 +40,7 @@
     activity_place, activity_place_detail, activity_time, push_time, domicile, person_type,
     nation, stay_internet_site, tj_time_reason, vehicle, tj_stay_site, tj_contact, belongings,
     virtual_identity, peer_staff, stay_staff, car_num, terrorist_char, control_type, check_site,
-    check_police, delete_flag
+    check_police, delete_flag, ext1
     FROM
     special_person
     WHERE
@@ -68,11 +69,14 @@
         and push_time &lt;= #{endPushTime,jdbcType=TIMESTAMP}
       </when>
     </choose>
-    <if test="jurisdiction != null">
+    <if test="jurisdiction != null and jurisdiction != ''">
       and jurisdiction = #{jurisdiction,jdbcType=VARCHAR}
     </if>
-    <if test="personType != null">
+    <if test="personType != null and personType != ''">
       and person_type = #{personType,jdbcType=BIT}
+    </if>
+    <if test="resourceName != null and resourceName != ''">
+      and resource_name = #{resourceName,jdbcType=VARCHAR}
     </if>
   </select>
 </mapper>

@@ -3,6 +3,7 @@ package cn.qsky.policesys.core.person;
 import cn.qsky.policesys.core.dao.model.ImportantPersonInfoModel;
 import cn.qsky.policesys.core.dao.model.ImportantPersonRecordModel;
 import cn.qsky.policesys.core.dto.ImportantPersonPageQueryDTO;
+import cn.qsky.policesys.core.dto.ImportantRecordPageQueryDTO;
 import com.github.pagehelper.Page;
 
 /**
@@ -67,11 +68,20 @@ public interface ImportantPersonService {
   int updateImportantPersonRecord(final ImportantPersonRecordModel importantPersonRecordModel);
 
   /**
-   * 分页数据查询
+   * 人员底库分页数据查询
    *
    * @param importantPersonPageQueryDTO dto
    * @return Page
    */
   Page<ImportantPersonInfoModel> listImportantPersonForPage(
       final ImportantPersonPageQueryDTO importantPersonPageQueryDTO);
+
+  /**
+   * 人员积分轨迹分页数据查询
+   *
+   * @param importantRecordPageQueryDTO dto
+   * @return Page
+   */
+  Page<ImportantPersonRecordModel> listImportantRecordForPage(
+      final ImportantRecordPageQueryDTO importantRecordPageQueryDTO);
 }

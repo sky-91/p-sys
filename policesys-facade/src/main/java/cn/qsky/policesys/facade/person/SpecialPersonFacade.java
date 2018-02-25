@@ -2,6 +2,7 @@ package cn.qsky.policesys.facade.person;
 
 import cn.qsky.policesys.common.data.PageData;
 import cn.qsky.policesys.facade.person.data.SpecialPersonData;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.Map;
@@ -53,4 +54,15 @@ public interface SpecialPersonFacade {
    * @return boolean
    */
   Boolean uploadSpecialPerson(Workbook workbook);
+
+  /**
+   * 导出重点人员EXCEL
+   *
+   * @param queryMap queryMap
+   * @param pageNum pageNum
+   * @param pageSize pageSize
+   * @return HSSFWorkbook
+   */
+  HSSFWorkbook exportSpecialPerson(final Map<String, Object> queryMap, final Integer pageNum,
+      final Integer pageSize);
 }

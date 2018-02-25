@@ -2,6 +2,7 @@ package cn.qsky.policesys.web.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.List;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -22,6 +23,9 @@ public class GroupSummaryVO {
 
   @ApiModelProperty(value = "删除标记")
   private Boolean deleteFlag;
+
+  @ApiModelProperty(value = "群体轨迹")
+  private List<GroupRecordVO> records;
 
   public String getGroupName() {
     return groupName;
@@ -53,6 +57,14 @@ public class GroupSummaryVO {
 
   public void setDeleteFlag(Boolean deleteFlag) {
     this.deleteFlag = deleteFlag;
+  }
+
+  public List<GroupRecordVO> getRecords() {
+    return records;
+  }
+
+  public void setRecords(List<GroupRecordVO> records) {
+    this.records = records;
   }
 
   @Override

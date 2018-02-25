@@ -3,12 +3,14 @@ package cn.qsky.policesys.facade.person.data;
 import java.util.Date;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.dozer.Mapping;
 
 /**
  * @author qsky on 17/12/6
  */
 public class ImportantPersonRecordData {
 
+  @Mapping("ext1")
   private String index;
 
   private String name;

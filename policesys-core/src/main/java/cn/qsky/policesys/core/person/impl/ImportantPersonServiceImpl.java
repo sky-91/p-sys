@@ -10,6 +10,7 @@ import cn.qsky.policesys.core.dao.model.ImportantPersonRecordModel;
 import cn.qsky.policesys.core.dao.model.PersonContactInfoModel;
 import cn.qsky.policesys.core.dao.model.PersonContactInfoModelExample;
 import cn.qsky.policesys.core.dto.ImportantPersonPageQueryDTO;
+import cn.qsky.policesys.core.dto.ImportantRecordPageQueryDTO;
 import cn.qsky.policesys.core.person.ImportantPersonService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -112,6 +113,17 @@ public class ImportantPersonServiceImpl implements ImportantPersonService {
         .startPage(importantPersonPageQueryDTO.getPageNumber(),
             importantPersonPageQueryDTO.getPageSize()).doSelectPage(() -> importantPersonInfoMapper
             .listImportantPersonInfoForPage(importantPersonPageQueryDTO));
+    return page;
+  }
+
+  @Override
+  public Page<ImportantPersonRecordModel> listImportantRecordForPage(
+      ImportantRecordPageQueryDTO importantRecordPageQueryDTO) {
+    Page<ImportantPersonRecordModel> page = PageHelper
+        .startPage(importantRecordPageQueryDTO.getPageNumber(),
+            importantRecordPageQueryDTO.getPageSize()).doSelectPage(
+            () -> importantPersonRecordMapper
+                .listImportantPersonRecordForPage(importantRecordPageQueryDTO));
     return page;
   }
 }
