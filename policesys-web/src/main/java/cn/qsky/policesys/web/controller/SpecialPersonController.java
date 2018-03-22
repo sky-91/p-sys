@@ -24,6 +24,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,11 +75,11 @@ public class SpecialPersonController {
   public PageVO<SpecialPersonVO> listSpecialPerson(
       @RequestParam(name = "startActivityTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") final Date startActivityTime,
       @RequestParam(name = "endActivityTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") final Date endActivityTime,
-      @RequestParam(name = "startPushTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") final Date startPushTime,
-      @RequestParam(name = "endPushTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") final Date endPushTime,
+      @RequestParam(name = "startPushTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") final Date startPushTime,
+      @RequestParam(name = "endPushTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") final Date endPushTime,
       @RequestParam(name = "jurisdiction", required = false) final String jurisdiction,
       @RequestParam(name = "personType", required = false) final Boolean personType,
-      @RequestParam(name = "resourceName", required = false) final Boolean resourceName,
+      @RequestParam(name = "resourceName", required = false) final String resourceName,
       @RequestParam(name = "pageNumber") final Integer pageNumber,
       @RequestParam(name = "pageSize") final Integer pageSize) {
     Map<String, Object> queryMap = new HashMap<>(16);
@@ -99,7 +100,7 @@ public class SpecialPersonController {
   @PostMapping("save")
   public Boolean saveSpecialPerson(
       @Valid @RequestBody final SpecialPersonVO specialPersonVO) {
-    LOG.debug(specialPersonVO.toString());
+    LOG.debug("saveSpecialPerson : {}", specialPersonVO.toString());
     return specialPersonFacade.saveSpecialPerson(CglibBeanUtil.copyProperties(specialPersonVO,
         SpecialPersonData.class));
   }
@@ -109,9 +110,17 @@ public class SpecialPersonController {
   @PutMapping("update")
   public Boolean updateSpecialPerson(
       @Valid @RequestBody final SpecialPersonVO specialPersonVO) {
-    LOG.debug(specialPersonVO.toString());
+    LOG.debug("updateSpecialPerson : {}", specialPersonVO.toString());
     return specialPersonFacade.updateSpecialPerson(CglibBeanUtil.copyProperties(specialPersonVO,
         SpecialPersonData.class));
+  }
+
+  @ApiOperation(value = "删除疆藏人员信息", notes = "删除接口")
+  @ApiImplicitParam(name = "idCard", value = "身份证", required = true, dataType = "String", paramType = "path")
+  @DeleteMapping("deleteById/{idCard}")
+  public Boolean deleteSpecialPerson(@NotBlank @PathVariable(name = "idCard") final String idCard) {
+    LOG.debug("deleteSpecialPerson : {}", idCard);
+    return specialPersonFacade.deleteSpecialPerson(idCard);
   }
 
   @ApiOperation(value = "文件导入疆藏人员信息", notes = "导入文件")
@@ -144,11 +153,11 @@ public class SpecialPersonController {
   public void exportSpecialPerson(
       @RequestParam(name = "startActivityTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") final Date startActivityTime,
       @RequestParam(name = "endActivityTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") final Date endActivityTime,
-      @RequestParam(name = "startPushTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") final Date startPushTime,
-      @RequestParam(name = "endPushTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") final Date endPushTime,
+      @RequestParam(name = "startPushTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") final Date startPushTime,
+      @RequestParam(name = "endPushTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") final Date endPushTime,
       @RequestParam(name = "jurisdiction", required = false) final String jurisdiction,
       @RequestParam(name = "personType", required = false) final Boolean personType,
-      @RequestParam(name = "resourceName", required = false) final Boolean resourceName,
+      @RequestParam(name = "resourceName", required = false) final String resourceName,
       HttpServletResponse response) {
     Map<String, Object> queryMap = new HashMap<>(16);
     queryMap.put("startActivityTime", startActivityTime);

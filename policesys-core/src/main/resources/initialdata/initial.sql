@@ -103,7 +103,7 @@ CREATE TABLE `special_person` (
     `domicile` VARCHAR(80) COMMENT '户籍地',
     `person_type` tinyint(1) default 0 COMMENT '人员类型',
     `nation` VARCHAR(5) COMMENT '民族',
-    `stay_internet_site` VARCHAR(5) COMMENT '住宿上网地点',
+    `stay_internet_site` VARCHAR(80) COMMENT '住宿上网地点',
     `tj_time_reason` VARCHAR(50) COMMENT '来津时间及事由',
     `vehicle` VARCHAR(20) COMMENT '来津方式',
     `tj_stay_site` VARCHAR(60) COMMENT '在津住地',
@@ -135,10 +135,12 @@ CREATE TABLE `important_person_info` (
     `nation` VARCHAR(5) COMMENT '民族',
     `age` tinyint(4) COMMENT '年龄',
     `group_type` VARCHAR(5) COMMENT '群体类别',
-    `controll_keyword` VARCHAR(11) COMMENT '列控关键字',
+    `control_keyword` VARCHAR(11) COMMENT '列控关键字',
     `marital_status` CHAR(2) COMMENT '婚姻状况',
     `domicile` VARCHAR(60) COMMENT '户籍地',
     `residence` VARCHAR(60) COMMENT '现住地',
+    `phone_text` VARCHAR(100) COMMENT '联系方式',
+    `wechat_name_text` VARCHAR(100) COMMENT '微信绑定名称',
     `jurisdiction` VARCHAR(10) COMMENT '管辖单位',
     `juri_police` VARCHAR(10) COMMENT '管辖派出所',
     `education` VARCHAR(5) COMMENT '学历',
@@ -146,7 +148,7 @@ CREATE TABLE `important_person_info` (
     `job` VARCHAR(5) COMMENT '职业',
     `work_place` VARCHAR(50) COMMENT '服务处所',
     `work_status` CHAR(2) COMMENT '工作状态',
-    `controll_reason` VARCHAR(50) COMMENT '列控事由',
+    `control_reason` VARCHAR(50) COMMENT '列控事由',
     `remark` VARCHAR(50) COMMENT '备注',
     `ext1` VARCHAR(50) COMMENT '扩展字段1',
     `ext2` VARCHAR(50) COMMENT '扩展字段2',
@@ -155,19 +157,6 @@ CREATE TABLE `important_person_info` (
     PRIMARY KEY (`PK`),
     UNIQUE (`name`, `id_card`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '重点人员底库表';
-
-CREATE TABLE `person_contact_info` (
-    `PK` BIGINT NOT NULL COMMENT '主键',
-    `created_time` DATETIME(3) NOT NULL COMMENT '创建时间',
-    `modified_time` DATETIME(3) COMMENT '修改时间',
-    `person_pk` BIGINT NOT NULL COMMENT '人员',
-    `phone` VARCHAR(15) COMMENT '联系方式',
-    `wechat_name` VARCHAR(15) COMMENT '微信绑定名称',
-    `ext1` VARCHAR(50) COMMENT '扩展字段1',
-    `delete_flag` tinyint(1) default 0 COMMENT '删除标记',
-    PRIMARY KEY (`PK`),
-    UNIQUE (`person_pk`, `phone`, `wechat_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '重点人员联系信息表';
 
 CREATE TABLE `important_person_record` (
     `PK` BIGINT NOT NULL COMMENT '主键',

@@ -108,12 +108,26 @@ public class ImportantPersonFacadeImpl implements ImportantPersonFacade {
   }
 
   @Override
+  @Transactional(rollbackFor = Exception.class)
+  public Boolean deleteImportantPersonInfo(String idCard) {
+    if (importantPersonService.deleteImportantPersonInfo(idCard) == 1) {
+      return true;
+    }
+    return false;
+  }
+
+  @Override
   public PageData<ImportantPersonInfoData> listImportantPersonForPage(
-      ImportantPersonPageQueryData importantPersonPageQueryData) {
+      ImportantPersonPageQueryData data) {
     return PageDataConverter.converter(importantPersonService.listImportantPersonForPage(
-        CglibBeanUtil
-            .copyProperties(importantPersonPageQueryData, ImportantPersonPageQueryDTO.class)),
+        CglibBeanUtil.copyProperties(data, ImportantPersonPageQueryDTO.class)),
         ImportantPersonInfoData.class);
+  }
+
+  @Override
+  public ImportantPersonRecordData getImportantPersonRecord(String pk) {
+    return CglibBeanUtil.copyProperties(importantPersonService.getImportantPersonRecord(pk),
+        ImportantPersonRecordData.class);
   }
 
   @Override
@@ -140,6 +154,15 @@ public class ImportantPersonFacadeImpl implements ImportantPersonFacade {
     } else {
       return false;
     }
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public Boolean deleteImportantPersonRecord(String pk) {
+    if (importantPersonService.deleteImportantPersonRecord(pk) == 1) {
+      return true;
+    }
+    return false;
   }
 
   @Override
@@ -196,8 +219,7 @@ public class ImportantPersonFacadeImpl implements ImportantPersonFacade {
       ImportantPersonPageQueryData importantPersonPageQueryData) {
     return importantPersonBuilder.fillPersonInfoBook(importantPersonService
         .listImportantPersonForPage(CglibBeanUtil
-            .copyProperties(importantPersonPageQueryData, ImportantPersonPageQueryDTO.class))
-        .getResult());
+            .copyProperties(importantPersonPageQueryData, ImportantPersonPageQueryDTO.class)));
   }
 
   @Override

@@ -201,13 +201,14 @@ public class GroupBuilderImpl implements GroupBuilder {
       for (int i = 0; i < modelList.size(); i++) {
         row = sheet.createRow(i + 1);
         GroupSummaryModel model = modelList.get(i);
-        row.createCell(0).setCellValue(model.getExt1());
-        row.createCell(1).setCellValue(model.getGroupName());
+        row.createCell(0).setCellValue(model.getExt1() == null ? "" : model.getExt1());
+        row.createCell(1).setCellValue(model.getGroupName() == null ? "" : model.getGroupName());
         row.createCell(2).setCellValue("");
         row.createCell(3).setCellValue("");
         row.createCell(4).setCellValue("");
-        row.createCell(5).setCellValue(model.getGroupType());
-        row.createCell(6).setCellValue(model.getGroupIntroduce());
+        row.createCell(5).setCellValue(model.getGroupType() == null ? "" : model.getGroupType());
+        row.createCell(6)
+            .setCellValue(model.getGroupIntroduce() == null ? "" : model.getGroupIntroduce());
       }
     }
     return wb;
@@ -238,21 +239,31 @@ public class GroupBuilderImpl implements GroupBuilder {
       for (int i = 0; i < modelList.size(); i++) {
         row = sheet.createRow(i + 1);
         GroupRecordModel model = modelList.get(i);
-        row.createCell(0).setCellValue(model.getExt1());
-        row.createCell(1).setCellValue(model.getScore());
-        row.createCell(2).setCellValue(model.getGroupName());
-        row.createCell(3).setCellValue(DateUtil.format(model.getRecordDate()));
-        row.createCell(4).setCellValue(model.getPetitionLocation());
-        row.createCell(5).setCellValue(model.getPetitionRegion());
-        row.createCell(6).setCellValue(model.getInciteMethod());
-        row.createCell(7).setCellValue(model.getInfoSources());
-        row.createCell(8).setCellValue(model.getActionGroup());
-        row.createCell(9).setCellValue(model.getGroupSize());
-        row.createCell(10).setCellValue(model.getPetitionDynamic());
-        row.createCell(11).setCellValue(model.getConfirm() ? "是" : "否");
-        row.createCell(12).setCellValue(model.getPetitionSituation());
-        row.createCell(13).setCellValue(model.getConsequence() ? "是" : "否");
-        row.createCell(14).setCellValue(model.getConseScore());
+        row.createCell(0).setCellValue(model.getExt1() == null ? "" : model.getExt1());
+        row.createCell(1).setCellValue(model.getScore() == null ? 0 : model.getScore());
+        row.createCell(2).setCellValue(model.getGroupName() == null ? "" : model.getGroupName());
+        row.createCell(3).setCellValue(
+            model.getRecordDate() == null ? "" : DateUtil.format(model.getRecordDate()));
+        row.createCell(4)
+            .setCellValue(model.getPetitionLocation() == null ? "" : model.getPetitionLocation());
+        row.createCell(5)
+            .setCellValue(model.getPetitionRegion() == null ? "" : model.getPetitionRegion());
+        row.createCell(6)
+            .setCellValue(model.getInciteMethod() == null ? "" : model.getInciteMethod());
+        row.createCell(7)
+            .setCellValue(model.getInfoSources() == null ? "" : model.getInfoSources());
+        row.createCell(8)
+            .setCellValue(model.getActionGroup() == null ? "" : model.getActionGroup());
+        row.createCell(9).setCellValue(model.getGroupSize() == null ? 0 : model.getGroupSize());
+        row.createCell(10)
+            .setCellValue(model.getPetitionDynamic() == null ? "" : model.getPetitionDynamic());
+        row.createCell(11)
+            .setCellValue(model.getConfirm() == null ? "" : model.getConfirm() ? "是" : "否");
+        row.createCell(12)
+            .setCellValue(model.getPetitionSituation() == null ? "" : model.getPetitionSituation());
+        row.createCell(13)
+            .setCellValue(model.getConsequence() == null ? "" : model.getConsequence() ? "是" : "否");
+        row.createCell(14).setCellValue(model.getConseScore() == null ? 0 : model.getConseScore());
       }
     }
     return wb;

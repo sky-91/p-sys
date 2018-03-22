@@ -18,7 +18,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +28,7 @@ import org.dozer.DozerBeanMapper;
 import org.hibernate.validator.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,7 +67,7 @@ public class GroupController {
   @PostMapping("groupSummary/save")
   public Boolean saveGroupSummary(
       @Valid @RequestBody final GroupSummaryVO groupSummaryVO) {
-    LOG.debug(groupSummaryVO.toString());
+    LOG.debug("saveGroupSummary : {}", groupSummaryVO.toString());
     return groupFacade.saveGroupSummary(CglibBeanUtil.copyProperties(groupSummaryVO,
         GroupSummaryData.class));
   }
@@ -77,9 +77,17 @@ public class GroupController {
   @PutMapping("groupSummary/update")
   public Boolean updateGroupSummary(
       @Valid @RequestBody final GroupSummaryVO groupSummaryVO) {
-    LOG.debug(groupSummaryVO.toString());
+    LOG.debug("updateGroupSummary : {}", groupSummaryVO.toString());
     return groupFacade.updateGroupSummary(CglibBeanUtil.copyProperties(groupSummaryVO,
         GroupSummaryData.class));
+  }
+
+  @ApiOperation(value = "删除群体汇总信息", notes = "删除接口")
+  @ApiImplicitParam(name = "name", value = "群体名称", required = true, dataType = "String", paramType = "path")
+  @DeleteMapping("groupSummary/deleteByName/{name}")
+  public Boolean deleteGroupSummary(@NotBlank @PathVariable(name = "name") final String name) {
+    LOG.debug("deleteGroupSummary : {}", name);
+    return groupFacade.deleteGroupSummary(name);
   }
 
   @ApiOperation(value = "群体汇总信息列表", notes = "群体汇总信息列表")
@@ -89,7 +97,7 @@ public class GroupController {
       @ApiImplicitParam(name = "pageNumber", value = "当前页码", paramType = "query", dataType = "Integer", required = true),
       @ApiImplicitParam(name = "pageSize", value = "每页显示多少条", paramType = "query", dataType = "Integer", required = true)
   })
-  @GetMapping(value = "GroupSummary/listForPage")
+  @GetMapping(value = "groupSummary/listForPage")
   public PageVO<GroupSummaryVO> listGroupSummary(
       @RequestParam(name = "groupName", required = false) final String groupName,
       @RequestParam(name = "groupType", required = false) final String groupType,
@@ -103,14 +111,13 @@ public class GroupController {
             GroupSummaryVO.class);
   }
 
-  @Deprecated
-  @ApiOperation(value = "根据群体名称获取群体活动记录", notes = "根据群体名称获取群体活动记录")
-  @ApiImplicitParam(name = "groupName", value = "群体名称", required = true, dataType = "String", paramType = "path")
-  @GetMapping("groupRecord/getByName/{groupName}")
-  public List<GroupRecordVO> getGroupRecord(
-      @NotBlank @PathVariable(name = "groupName") final String groupName) {
+  @ApiOperation(value = "获取群体活动记录", notes = "根据pk获取群体活动记录")
+  @ApiImplicitParam(name = "pk", value = "pk", required = true, dataType = "String", paramType = "path")
+  @GetMapping("groupRecord/getByPk/{pk}")
+  public GroupRecordVO getGroupRecord(
+      @NotBlank @PathVariable(name = "pk") final String pk) {
     return CglibBeanUtil
-        .converterList(groupFacade.getGroupRecord(groupName), GroupRecordVO.class);
+        .copyProperties(groupFacade.getGroupRecord(pk), GroupRecordVO.class);
   }
 
   @ApiOperation(value = "保存群体活动记录", notes = "保存接口")
@@ -118,7 +125,7 @@ public class GroupController {
   @PostMapping("groupRecord/save")
   public Boolean saveGroupRecord(
       @Valid @RequestBody final GroupRecordVO groupRecordVO) {
-    LOG.debug(groupRecordVO.toString());
+    LOG.debug("saveGroupRecord : {}", groupRecordVO.toString());
     return groupFacade.saveGroupRecord(CglibBeanUtil.copyProperties(groupRecordVO,
         GroupRecordData.class));
   }
@@ -128,9 +135,17 @@ public class GroupController {
   @PutMapping("groupRecord/update")
   public Boolean updateGroupRecord(
       @Valid @RequestBody final GroupRecordVO groupRecordVO) {
-    LOG.debug(groupRecordVO.toString());
+    LOG.debug("updateGroupRecord : {}", groupRecordVO.toString());
     return groupFacade.updateGroupRecord(CglibBeanUtil.copyProperties(groupRecordVO,
         GroupRecordData.class));
+  }
+
+  @ApiOperation(value = "删除群体活动记录", notes = "删除接口")
+  @ApiImplicitParam(name = "pk", value = "PK", required = true, dataType = "String", paramType = "path")
+  @DeleteMapping("groupRecord/deleteByPk/{pk}")
+  public Boolean deleteGroupRecord(@NotBlank @PathVariable(name = "pk") final String pk) {
+    LOG.debug("deleteGroupRecord : {}", pk);
+    return groupFacade.deleteGroupRecord(pk);
   }
 
   @ApiOperation(value = "群体活动记录清单列表", notes = "分页显示群体活动记录清单")
@@ -144,7 +159,7 @@ public class GroupController {
   }
 
   @ApiOperation(value = "文件导入群体汇总信息", notes = "导入文件")
-  @PostMapping(value = "upload")
+  @PostMapping(value = "groupSummary/upload")
   public @ResponseBody
   Boolean importGroup(@RequestParam("file") MultipartFile file) {
     if (!file.isEmpty()) {
@@ -159,7 +174,7 @@ public class GroupController {
   }
 
   @ApiOperation(value = "文件导入群体活动记录", notes = "导入文件")
-  @PostMapping(value = "record/upload")
+  @PostMapping(value = "groupRecord/upload")
   public @ResponseBody
   Boolean importRecord(@RequestParam("file") MultipartFile file) {
     if (!file.isEmpty()) {
@@ -174,7 +189,7 @@ public class GroupController {
   }
 
   @ApiOperation(value = "导出群体汇总信息EXCEL", notes = "导出群体汇总信息EXCEL")
-  @GetMapping(value = "GroupSummary/export")
+  @GetMapping(value = "groupSummary/export")
   @ApiImplicitParams({
       @ApiImplicitParam(name = "groupName", value = "群体名称", paramType = "query", dataType = "String"),
       @ApiImplicitParam(name = "groupType", value = "群体类别", paramType = "query", dataType = "String")

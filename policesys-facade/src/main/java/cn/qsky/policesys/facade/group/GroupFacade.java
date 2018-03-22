@@ -4,7 +4,6 @@ import cn.qsky.policesys.common.data.PageData;
 import cn.qsky.policesys.facade.group.data.GroupRecordData;
 import cn.qsky.policesys.facade.group.data.GroupRecordPageQueryData;
 import cn.qsky.policesys.facade.group.data.GroupSummaryData;
-import java.util.List;
 import java.util.Map;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -39,12 +38,20 @@ public interface GroupFacade {
   Boolean updateGroupSummary(final GroupSummaryData groupSummaryData);
 
   /**
-   * 根据群体名称获取群体活动记录
+   * 删除群体汇总信息
    *
-   * @param groupName 群体名称
-   * @return list
+   * @param groupName groupName
+   * @return boolean
    */
-  List<GroupRecordData> getGroupRecord(final String groupName);
+  Boolean deleteGroupSummary(final String groupName);
+
+  /**
+   * 根据pk获取群体活动记录
+   *
+   * @param pk pk
+   * @return GroupRecordData
+   */
+  GroupRecordData getGroupRecord(final String pk);
 
   /**
    * 保存群体活动记录
@@ -61,6 +68,14 @@ public interface GroupFacade {
    * @return boolean
    */
   Boolean updateGroupRecord(final GroupRecordData groupRecordData);
+
+  /**
+   * 删除群体活动记录
+   *
+   * @param pk pk
+   * @return boolean
+   */
+  Boolean deleteGroupRecord(final String pk);
 
   /**
    * 获取所有的群体汇总信息

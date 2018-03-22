@@ -13,6 +13,8 @@ public class ImportantPersonRecordData {
   @Mapping("ext1")
   private String index;
 
+  private Long pk;
+
   private String name;
 
   private String idCard;
@@ -52,6 +54,14 @@ public class ImportantPersonRecordData {
   private String recordType;
 
   private Boolean deleteFlag;
+
+  public Long getPk() {
+    return pk;
+  }
+
+  public void setPk(Long pk) {
+    this.pk = pk;
+  }
 
   public String getIndex() {
     return index;

@@ -1,14 +1,12 @@
 package cn.qsky.policesys.core.person.impl;
 
-import cn.qsky.policesys.common.SourceNotFoundException;
+import cn.qsky.policesys.common.exception.SourceNotFoundException;
 import cn.qsky.policesys.core.dao.mapper.ImportantPersonInfoMapper;
 import cn.qsky.policesys.core.dao.mapper.ImportantPersonRecordMapper;
-import cn.qsky.policesys.core.dao.mapper.PersonContactInfoMapper;
 import cn.qsky.policesys.core.dao.model.ImportantPersonInfoModel;
 import cn.qsky.policesys.core.dao.model.ImportantPersonInfoModelExample;
 import cn.qsky.policesys.core.dao.model.ImportantPersonRecordModel;
-import cn.qsky.policesys.core.dao.model.PersonContactInfoModel;
-import cn.qsky.policesys.core.dao.model.PersonContactInfoModelExample;
+import cn.qsky.policesys.core.dao.model.ImportantPersonRecordModelExample;
 import cn.qsky.policesys.core.dto.ImportantPersonPageQueryDTO;
 import cn.qsky.policesys.core.dto.ImportantRecordPageQueryDTO;
 import cn.qsky.policesys.core.person.ImportantPersonService;
@@ -30,9 +28,6 @@ public class ImportantPersonServiceImpl implements ImportantPersonService {
 
   @Resource
   private ImportantPersonRecordMapper importantPersonRecordMapper;
-
-  @Resource
-  private PersonContactInfoMapper personContactInfoMapper;
 
   @Override
   public ImportantPersonInfoModel getSimplePersonInfo(String idCard) {
@@ -67,31 +62,36 @@ public class ImportantPersonServiceImpl implements ImportantPersonService {
 
   @Override
   public int saveImportantPersonInfo(ImportantPersonInfoModel importantPersonInfoModel) {
-    List<PersonContactInfoModel> contactModels = importantPersonInfoModel.getContacts();
-    int result = importantPersonInfoMapper.insertSelective(importantPersonInfoModel);
-    if (result == 1 && CollectionUtils.isNotEmpty(contactModels)) {
-      for (PersonContactInfoModel contact : contactModels) {
-        contact.setPersonPk(importantPersonInfoModel.getPk());
-        personContactInfoMapper.insertSelective(contact);
-      }
-    }
-    return result;
+    return importantPersonInfoMapper.insertSelective(importantPersonInfoModel);
   }
 
   @Override
   public int updateImportantPersonInfo(ImportantPersonInfoModel importantPersonInfoModel) {
-    Long pk = importantPersonInfoModel.getPk();
-    List<PersonContactInfoModel> contactModels = importantPersonInfoModel.getContacts();
-    PersonContactInfoModelExample example = new PersonContactInfoModelExample();
-    example.or().andPersonPkEqualTo(pk);
-    personContactInfoMapper.deleteByExample(example);
-    if (CollectionUtils.isNotEmpty(contactModels)) {
-      for (PersonContactInfoModel contact : contactModels) {
-        contact.setPersonPk(importantPersonInfoModel.getPk());
-        personContactInfoMapper.insertSelective(contact);
-      }
+    ImportantPersonInfoModelExample infoExample = new ImportantPersonInfoModelExample();
+    infoExample.or().andIdCardEqualTo(importantPersonInfoModel.getIdCard());
+    return importantPersonInfoMapper
+        .updateByExampleSelective(importantPersonInfoModel, infoExample);
+  }
+
+  @Override
+  public int deleteImportantPersonInfo(String idCard) {
+    ImportantPersonRecordModelExample recordExample = new ImportantPersonRecordModelExample();
+    recordExample.or().andIdCardEqualTo(idCard);
+    importantPersonRecordMapper.deleteByExample(recordExample);
+
+    ImportantPersonInfoModelExample example = new ImportantPersonInfoModelExample();
+    example.or().andIdCardEqualTo(idCard);
+    return importantPersonInfoMapper.deleteByExample(example);
+  }
+
+  @Override
+  public ImportantPersonRecordModel getImportantPersonRecord(String pk) {
+    ImportantPersonRecordModel model = importantPersonRecordMapper
+        .selectByPrimaryKey(Long.valueOf(pk));
+    if (model == null) {
+      throw new SourceNotFoundException();
     }
-    return importantPersonInfoMapper.updateByPrimaryKeySelective(importantPersonInfoModel);
+    return model;
   }
 
   @Override
@@ -107,23 +107,21 @@ public class ImportantPersonServiceImpl implements ImportantPersonService {
   }
 
   @Override
+  public int deleteImportantPersonRecord(String pk) {
+    return importantPersonRecordMapper.deleteByPrimaryKey(Long.valueOf(pk));
+  }
+
+  @Override
   public Page<ImportantPersonInfoModel> listImportantPersonForPage(
-      ImportantPersonPageQueryDTO importantPersonPageQueryDTO) {
-    Page<ImportantPersonInfoModel> page = PageHelper
-        .startPage(importantPersonPageQueryDTO.getPageNumber(),
-            importantPersonPageQueryDTO.getPageSize()).doSelectPage(() -> importantPersonInfoMapper
-            .listImportantPersonInfoForPage(importantPersonPageQueryDTO));
-    return page;
+      ImportantPersonPageQueryDTO dto) {
+    return PageHelper.startPage(dto.getPageNumber(), dto.getPageSize())
+        .doSelectPage(() -> importantPersonInfoMapper.listImportantPersonInfoForPage(dto));
   }
 
   @Override
   public Page<ImportantPersonRecordModel> listImportantRecordForPage(
-      ImportantRecordPageQueryDTO importantRecordPageQueryDTO) {
-    Page<ImportantPersonRecordModel> page = PageHelper
-        .startPage(importantRecordPageQueryDTO.getPageNumber(),
-            importantRecordPageQueryDTO.getPageSize()).doSelectPage(
-            () -> importantPersonRecordMapper
-                .listImportantPersonRecordForPage(importantRecordPageQueryDTO));
-    return page;
+      ImportantRecordPageQueryDTO dto) {
+    return PageHelper.startPage(dto.getPageNumber(), dto.getPageSize())
+        .doSelectPage(() -> importantPersonRecordMapper.listImportantPersonRecordForPage(dto));
   }
 }

@@ -72,7 +72,7 @@
     <if test="jurisdiction != null and jurisdiction != ''">
       and jurisdiction = #{jurisdiction,jdbcType=VARCHAR}
     </if>
-    <if test="personType != null and personType != ''">
+    <if test="personType != null">
       and person_type = #{personType,jdbcType=BIT}
     </if>
     <if test="resourceName != null and resourceName != ''">

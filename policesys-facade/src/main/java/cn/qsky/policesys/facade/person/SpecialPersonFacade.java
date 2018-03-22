@@ -37,6 +37,14 @@ public interface SpecialPersonFacade {
   Boolean updateSpecialPerson(final SpecialPersonData specialPersonData);
 
   /**
+   * 删除特殊人员
+   *
+   * @param idCard idCard
+   * @return boolean
+   */
+  Boolean deleteSpecialPerson(final String idCard);
+
+  /**
    * 分页数据查询
    *
    * @param queryMap queryMap

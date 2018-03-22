@@ -31,7 +31,7 @@ public class ImportantPersonInfoVO {
   private String groupType;
 
   @ApiModelProperty(value = "列控关键字")
-  private String controllKeyword;
+  private String controlKeyword;
 
   @ApiModelProperty(value = "婚姻状况")
   private String maritalStatus;
@@ -64,7 +64,7 @@ public class ImportantPersonInfoVO {
   private String workStatus;
 
   @ApiModelProperty(value = "列控事由")
-  private String controllReason;
+  private String controlReason;
 
   @ApiModelProperty(value = "备注")
   private String remark;
@@ -72,8 +72,14 @@ public class ImportantPersonInfoVO {
   @ApiModelProperty(value = "删除标记")
   private Boolean deleteFlag;
 
-  @ApiModelProperty(value = "联系信息")
-  private List<PersonContactInfoVO> contacts;
+  @ApiModelProperty(value = "电话文本")
+  private String phoneText;
+
+  @ApiModelProperty(value = "微信文本")
+  private String wechatNameText;
+
+  @ApiModelProperty(value = "扩展字段-序号")
+  private String ext1;
 
   @ApiModelProperty(value = "轨迹积分")
   private List<ImportantPersonRecordVO> records;
@@ -126,12 +132,12 @@ public class ImportantPersonInfoVO {
     this.groupType = groupType;
   }
 
-  public String getControllKeyword() {
-    return controllKeyword;
+  public String getControlKeyword() {
+    return controlKeyword;
   }
 
-  public void setControllKeyword(String controllKeyword) {
-    this.controllKeyword = controllKeyword;
+  public void setControlKeyword(String controlKeyword) {
+    this.controlKeyword = controlKeyword;
   }
 
   public String getMaritalStatus() {
@@ -214,12 +220,12 @@ public class ImportantPersonInfoVO {
     this.workStatus = workStatus;
   }
 
-  public String getControllReason() {
-    return controllReason;
+  public String getControlReason() {
+    return controlReason;
   }
 
-  public void setControllReason(String controllReason) {
-    this.controllReason = controllReason;
+  public void setControlReason(String controlReason) {
+    this.controlReason = controlReason;
   }
 
   public String getRemark() {
@@ -238,12 +244,28 @@ public class ImportantPersonInfoVO {
     this.deleteFlag = deleteFlag;
   }
 
-  public List<PersonContactInfoVO> getContacts() {
-    return contacts;
+  public String getPhoneText() {
+    return phoneText;
   }
 
-  public void setContacts(List<PersonContactInfoVO> contacts) {
-    this.contacts = contacts;
+  public void setPhoneText(String phoneText) {
+    this.phoneText = phoneText;
+  }
+
+  public String getWechatNameText() {
+    return wechatNameText;
+  }
+
+  public void setWechatNameText(String wechatNameText) {
+    this.wechatNameText = wechatNameText;
+  }
+
+  public String getExt1() {
+    return ext1;
+  }
+
+  public void setExt1(String ext1) {
+    this.ext1 = ext1;
   }
 
   public List<ImportantPersonRecordVO> getRecords() {

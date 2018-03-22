@@ -13,6 +13,8 @@ public class GroupRecordData {
   @Mapping("ext1")
   private String index;
 
+  private Long pk;
+
   private String groupName;
 
   private Date recordDate;
@@ -45,6 +47,14 @@ public class GroupRecordData {
 
   public String getIndex() {
     return index;
+  }
+
+  public Long getPk() {
+    return pk;
+  }
+
+  public void setPk(Long pk) {
+    this.pk = pk;
   }
 
   public void setIndex(String index) {

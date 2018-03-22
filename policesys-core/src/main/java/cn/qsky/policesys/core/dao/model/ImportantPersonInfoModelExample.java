@@ -777,73 +777,73 @@ public class ImportantPersonInfoModelExample {
       return (Criteria) this;
     }
 
-    public Criteria andControllKeywordIsNull() {
-      addCriterion("controll_keyword is null");
+    public Criteria andControlKeywordIsNull() {
+      addCriterion("control_keyword is null");
       return (Criteria) this;
     }
 
-    public Criteria andControllKeywordIsNotNull() {
-      addCriterion("controll_keyword is not null");
+    public Criteria andControlKeywordIsNotNull() {
+      addCriterion("control_keyword is not null");
       return (Criteria) this;
     }
 
-    public Criteria andControllKeywordEqualTo(String value) {
-      addCriterion("controll_keyword =", value, "controllKeyword");
+    public Criteria andControlKeywordEqualTo(String value) {
+      addCriterion("control_keyword =", value, "controlKeyword");
       return (Criteria) this;
     }
 
-    public Criteria andControllKeywordNotEqualTo(String value) {
-      addCriterion("controll_keyword <>", value, "controllKeyword");
+    public Criteria andControlKeywordNotEqualTo(String value) {
+      addCriterion("control_keyword <>", value, "controlKeyword");
       return (Criteria) this;
     }
 
-    public Criteria andControllKeywordGreaterThan(String value) {
-      addCriterion("controll_keyword >", value, "controllKeyword");
+    public Criteria andControlKeywordGreaterThan(String value) {
+      addCriterion("control_keyword >", value, "controlKeyword");
       return (Criteria) this;
     }
 
-    public Criteria andControllKeywordGreaterThanOrEqualTo(String value) {
-      addCriterion("controll_keyword >=", value, "controllKeyword");
+    public Criteria andControlKeywordGreaterThanOrEqualTo(String value) {
+      addCriterion("control_keyword >=", value, "controlKeyword");
       return (Criteria) this;
     }
 
-    public Criteria andControllKeywordLessThan(String value) {
-      addCriterion("controll_keyword <", value, "controllKeyword");
+    public Criteria andControlKeywordLessThan(String value) {
+      addCriterion("control_keyword <", value, "controlKeyword");
       return (Criteria) this;
     }
 
-    public Criteria andControllKeywordLessThanOrEqualTo(String value) {
-      addCriterion("controll_keyword <=", value, "controllKeyword");
+    public Criteria andControlKeywordLessThanOrEqualTo(String value) {
+      addCriterion("control_keyword <=", value, "controlKeyword");
       return (Criteria) this;
     }
 
-    public Criteria andControllKeywordLike(String value) {
-      addCriterion("controll_keyword like", value, "controllKeyword");
+    public Criteria andControlKeywordLike(String value) {
+      addCriterion("control_keyword like", value, "controlKeyword");
       return (Criteria) this;
     }
 
-    public Criteria andControllKeywordNotLike(String value) {
-      addCriterion("controll_keyword not like", value, "controllKeyword");
+    public Criteria andControlKeywordNotLike(String value) {
+      addCriterion("control_keyword not like", value, "controlKeyword");
       return (Criteria) this;
     }
 
-    public Criteria andControllKeywordIn(List<String> values) {
-      addCriterion("controll_keyword in", values, "controllKeyword");
+    public Criteria andControlKeywordIn(List<String> values) {
+      addCriterion("control_keyword in", values, "controlKeyword");
       return (Criteria) this;
     }
 
-    public Criteria andControllKeywordNotIn(List<String> values) {
-      addCriterion("controll_keyword not in", values, "controllKeyword");
+    public Criteria andControlKeywordNotIn(List<String> values) {
+      addCriterion("control_keyword not in", values, "controlKeyword");
       return (Criteria) this;
     }
 
-    public Criteria andControllKeywordBetween(String value1, String value2) {
-      addCriterion("controll_keyword between", value1, value2, "controllKeyword");
+    public Criteria andControlKeywordBetween(String value1, String value2) {
+      addCriterion("control_keyword between", value1, value2, "controlKeyword");
       return (Criteria) this;
     }
 
-    public Criteria andControllKeywordNotBetween(String value1, String value2) {
-      addCriterion("controll_keyword not between", value1, value2, "controllKeyword");
+    public Criteria andControlKeywordNotBetween(String value1, String value2) {
+      addCriterion("control_keyword not between", value1, value2, "controlKeyword");
       return (Criteria) this;
     }
 
@@ -1054,6 +1054,146 @@ public class ImportantPersonInfoModelExample {
 
     public Criteria andResidenceNotBetween(String value1, String value2) {
       addCriterion("residence not between", value1, value2, "residence");
+      return (Criteria) this;
+    }
+
+    public Criteria andPhoneTextIsNull() {
+      addCriterion("phone_text is null");
+      return (Criteria) this;
+    }
+
+    public Criteria andPhoneTextIsNotNull() {
+      addCriterion("phone_text is not null");
+      return (Criteria) this;
+    }
+
+    public Criteria andPhoneTextEqualTo(String value) {
+      addCriterion("phone_text =", value, "phoneText");
+      return (Criteria) this;
+    }
+
+    public Criteria andPhoneTextNotEqualTo(String value) {
+      addCriterion("phone_text <>", value, "phoneText");
+      return (Criteria) this;
+    }
+
+    public Criteria andPhoneTextGreaterThan(String value) {
+      addCriterion("phone_text >", value, "phoneText");
+      return (Criteria) this;
+    }
+
+    public Criteria andPhoneTextGreaterThanOrEqualTo(String value) {
+      addCriterion("phone_text >=", value, "phoneText");
+      return (Criteria) this;
+    }
+
+    public Criteria andPhoneTextLessThan(String value) {
+      addCriterion("phone_text <", value, "phoneText");
+      return (Criteria) this;
+    }
+
+    public Criteria andPhoneTextLessThanOrEqualTo(String value) {
+      addCriterion("phone_text <=", value, "phoneText");
+      return (Criteria) this;
+    }
+
+    public Criteria andPhoneTextLike(String value) {
+      addCriterion("phone_text like", value, "phoneText");
+      return (Criteria) this;
+    }
+
+    public Criteria andPhoneTextNotLike(String value) {
+      addCriterion("phone_text not like", value, "phoneText");
+      return (Criteria) this;
+    }
+
+    public Criteria andPhoneTextIn(List<String> values) {
+      addCriterion("phone_text in", values, "phoneText");
+      return (Criteria) this;
+    }
+
+    public Criteria andPhoneTextNotIn(List<String> values) {
+      addCriterion("phone_text not in", values, "phoneText");
+      return (Criteria) this;
+    }
+
+    public Criteria andPhoneTextBetween(String value1, String value2) {
+      addCriterion("phone_text between", value1, value2, "phoneText");
+      return (Criteria) this;
+    }
+
+    public Criteria andPhoneTextNotBetween(String value1, String value2) {
+      addCriterion("phone_text not between", value1, value2, "phoneText");
+      return (Criteria) this;
+    }
+
+    public Criteria andWechatNameTextIsNull() {
+      addCriterion("wechat_name_text is null");
+      return (Criteria) this;
+    }
+
+    public Criteria andWechatNameTextIsNotNull() {
+      addCriterion("wechat_name_text is not null");
+      return (Criteria) this;
+    }
+
+    public Criteria andWechatNameTextEqualTo(String value) {
+      addCriterion("wechat_name_text =", value, "wechatNameText");
+      return (Criteria) this;
+    }
+
+    public Criteria andWechatNameTextNotEqualTo(String value) {
+      addCriterion("wechat_name_text <>", value, "wechatNameText");
+      return (Criteria) this;
+    }
+
+    public Criteria andWechatNameTextGreaterThan(String value) {
+      addCriterion("wechat_name_text >", value, "wechatNameText");
+      return (Criteria) this;
+    }
+
+    public Criteria andWechatNameTextGreaterThanOrEqualTo(String value) {
+      addCriterion("wechat_name_text >=", value, "wechatNameText");
+      return (Criteria) this;
+    }
+
+    public Criteria andWechatNameTextLessThan(String value) {
+      addCriterion("wechat_name_text <", value, "wechatNameText");
+      return (Criteria) this;
+    }
+
+    public Criteria andWechatNameTextLessThanOrEqualTo(String value) {
+      addCriterion("wechat_name_text <=", value, "wechatNameText");
+      return (Criteria) this;
+    }
+
+    public Criteria andWechatNameTextLike(String value) {
+      addCriterion("wechat_name_text like", value, "wechatNameText");
+      return (Criteria) this;
+    }
+
+    public Criteria andWechatNameTextNotLike(String value) {
+      addCriterion("wechat_name_text not like", value, "wechatNameText");
+      return (Criteria) this;
+    }
+
+    public Criteria andWechatNameTextIn(List<String> values) {
+      addCriterion("wechat_name_text in", values, "wechatNameText");
+      return (Criteria) this;
+    }
+
+    public Criteria andWechatNameTextNotIn(List<String> values) {
+      addCriterion("wechat_name_text not in", values, "wechatNameText");
+      return (Criteria) this;
+    }
+
+    public Criteria andWechatNameTextBetween(String value1, String value2) {
+      addCriterion("wechat_name_text between", value1, value2, "wechatNameText");
+      return (Criteria) this;
+    }
+
+    public Criteria andWechatNameTextNotBetween(String value1, String value2) {
+      addCriterion("wechat_name_text not between", value1, value2, "wechatNameText");
       return (Criteria) this;
     }
 
@@ -1547,73 +1687,73 @@ public class ImportantPersonInfoModelExample {
       return (Criteria) this;
     }
 
-    public Criteria andControllReasonIsNull() {
-      addCriterion("controll_reason is null");
+    public Criteria andControlReasonIsNull() {
+      addCriterion("control_reason is null");
       return (Criteria) this;
     }
 
-    public Criteria andControllReasonIsNotNull() {
-      addCriterion("controll_reason is not null");
+    public Criteria andControlReasonIsNotNull() {
+      addCriterion("control_reason is not null");
       return (Criteria) this;
     }
 
-    public Criteria andControllReasonEqualTo(String value) {
-      addCriterion("controll_reason =", value, "controllReason");
+    public Criteria andControlReasonEqualTo(String value) {
+      addCriterion("control_reason =", value, "controlReason");
       return (Criteria) this;
     }
 
-    public Criteria andControllReasonNotEqualTo(String value) {
-      addCriterion("controll_reason <>", value, "controllReason");
+    public Criteria andControlReasonNotEqualTo(String value) {
+      addCriterion("control_reason <>", value, "controlReason");
       return (Criteria) this;
     }
 
-    public Criteria andControllReasonGreaterThan(String value) {
-      addCriterion("controll_reason >", value, "controllReason");
+    public Criteria andControlReasonGreaterThan(String value) {
+      addCriterion("control_reason >", value, "controlReason");
       return (Criteria) this;
     }
 
-    public Criteria andControllReasonGreaterThanOrEqualTo(String value) {
-      addCriterion("controll_reason >=", value, "controllReason");
+    public Criteria andControlReasonGreaterThanOrEqualTo(String value) {
+      addCriterion("control_reason >=", value, "controlReason");
       return (Criteria) this;
     }
 
-    public Criteria andControllReasonLessThan(String value) {
-      addCriterion("controll_reason <", value, "controllReason");
+    public Criteria andControlReasonLessThan(String value) {
+      addCriterion("control_reason <", value, "controlReason");
       return (Criteria) this;
     }
 
-    public Criteria andControllReasonLessThanOrEqualTo(String value) {
-      addCriterion("controll_reason <=", value, "controllReason");
+    public Criteria andControlReasonLessThanOrEqualTo(String value) {
+      addCriterion("control_reason <=", value, "controlReason");
       return (Criteria) this;
     }
 
-    public Criteria andControllReasonLike(String value) {
-      addCriterion("controll_reason like", value, "controllReason");
+    public Criteria andControlReasonLike(String value) {
+      addCriterion("control_reason like", value, "controlReason");
       return (Criteria) this;
     }
 
-    public Criteria andControllReasonNotLike(String value) {
-      addCriterion("controll_reason not like", value, "controllReason");
+    public Criteria andControlReasonNotLike(String value) {
+      addCriterion("control_reason not like", value, "controlReason");
       return (Criteria) this;
     }
 
-    public Criteria andControllReasonIn(List<String> values) {
-      addCriterion("controll_reason in", values, "controllReason");
+    public Criteria andControlReasonIn(List<String> values) {
+      addCriterion("control_reason in", values, "controlReason");
       return (Criteria) this;
     }
 
-    public Criteria andControllReasonNotIn(List<String> values) {
-      addCriterion("controll_reason not in", values, "controllReason");
+    public Criteria andControlReasonNotIn(List<String> values) {
+      addCriterion("control_reason not in", values, "controlReason");
       return (Criteria) this;
     }
 
-    public Criteria andControllReasonBetween(String value1, String value2) {
-      addCriterion("controll_reason between", value1, value2, "controllReason");
+    public Criteria andControlReasonBetween(String value1, String value2) {
+      addCriterion("control_reason between", value1, value2, "controlReason");
       return (Criteria) this;
     }
 
-    public Criteria andControllReasonNotBetween(String value1, String value2) {
-      addCriterion("controll_reason not between", value1, value2, "controllReason");
+    public Criteria andControlReasonNotBetween(String value1, String value2) {
+      addCriterion("control_reason not between", value1, value2, "controlReason");
       return (Criteria) this;
     }
 

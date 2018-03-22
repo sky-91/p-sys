@@ -1,5 +1,6 @@
 package cn.qsky.policesys.web.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
@@ -12,6 +13,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
 @ApiModel("ImportantPersonRecordVO(重点人员轨迹积分表)")
 public class ImportantPersonRecordVO {
 
+  @ApiModelProperty(value = "pk")
+  private Long pk;
+
   @ApiModelProperty(value = "姓名")
   private String name;
 
@@ -22,6 +26,7 @@ public class ImportantPersonRecordVO {
   private Byte score;
 
   @ApiModelProperty(value = "日期")
+  @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
   private Date recordDate;
 
   @ApiModelProperty(value = "星期")
@@ -69,8 +74,19 @@ public class ImportantPersonRecordVO {
   @ApiModelProperty(value = "轨迹类别")
   private String recordType;
 
+  @ApiModelProperty(value = "扩展字段-序号")
+  private String ext1;
+
   @ApiModelProperty(value = "删除标识")
   private Boolean deleteFlag;
+
+  public Long getPk() {
+    return pk;
+  }
+
+  public void setPk(Long pk) {
+    this.pk = pk;
+  }
 
   public String getName() {
     return name;
@@ -222,6 +238,14 @@ public class ImportantPersonRecordVO {
 
   public void setRecordType(String recordType) {
     this.recordType = recordType;
+  }
+
+  public String getExt1() {
+    return ext1;
+  }
+
+  public void setExt1(String ext1) {
+    this.ext1 = ext1;
   }
 
   public Boolean getDeleteFlag() {

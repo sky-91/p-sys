@@ -23,7 +23,7 @@ public class ImportantPersonInfoData {
 
   private String groupType;
 
-  private String controllKeyword;
+  private String controlKeyword;
 
   private String maritalStatus;
 
@@ -45,13 +45,15 @@ public class ImportantPersonInfoData {
 
   private String workStatus;
 
-  private String controllReason;
+  private String controlReason;
 
   private String remark;
 
   private Boolean deleteFlag;
 
-  private List<PersonContactInfoData> contacts;
+  private String phoneText;
+
+  private String wechatNameText;
 
   private List<ImportantPersonRecordData> records;
 
@@ -111,12 +113,12 @@ public class ImportantPersonInfoData {
     this.groupType = groupType;
   }
 
-  public String getControllKeyword() {
-    return controllKeyword;
+  public String getControlKeyword() {
+    return controlKeyword;
   }
 
-  public void setControllKeyword(String controllKeyword) {
-    this.controllKeyword = controllKeyword;
+  public void setControlKeyword(String controlKeyword) {
+    this.controlKeyword = controlKeyword;
   }
 
   public String getMaritalStatus() {
@@ -199,12 +201,12 @@ public class ImportantPersonInfoData {
     this.workStatus = workStatus;
   }
 
-  public String getControllReason() {
-    return controllReason;
+  public String getControlReason() {
+    return controlReason;
   }
 
-  public void setControllReason(String controllReason) {
-    this.controllReason = controllReason;
+  public void setControlReason(String controlReason) {
+    this.controlReason = controlReason;
   }
 
   public String getRemark() {
@@ -223,13 +225,20 @@ public class ImportantPersonInfoData {
     this.deleteFlag = deleteFlag;
   }
 
-  public List<PersonContactInfoData> getContacts() {
-    return contacts;
+  public String getPhoneText() {
+    return phoneText;
   }
 
-  public void setContacts(
-      List<PersonContactInfoData> contacts) {
-    this.contacts = contacts;
+  public void setPhoneText(String phoneText) {
+    this.phoneText = phoneText;
+  }
+
+  public String getWechatNameText() {
+    return wechatNameText;
+  }
+
+  public void setWechatNameText(String wechatNameText) {
+    this.wechatNameText = wechatNameText;
   }
 
   public List<ImportantPersonRecordData> getRecords() {

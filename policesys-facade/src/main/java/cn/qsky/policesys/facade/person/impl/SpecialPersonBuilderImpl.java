@@ -232,33 +232,44 @@ public class SpecialPersonBuilderImpl implements SpecialPersonBuilder {
       for (int i = 0; i < personList.size(); i++) {
         row = sheet.createRow(i + 1);
         SpecialPersonModel model = personList.get(i);
-        row.createCell(0).setCellValue(model.getExt1());
-        row.createCell(1).setCellValue(model.getJurisdiction());
-        row.createCell(2).setCellValue(model.getResourceName());
-        row.createCell(3).setCellValue(model.getName());
-        row.createCell(4).setCellValue(model.getIdCard());
-        row.createCell(5).setCellValue(model.getActivityPlace());
-        row.createCell(6).setCellValue(model.getActivityPlaceDetail());
-        row.createCell(7).setCellValue(
+        row.createCell(0).setCellValue(model.getExt1() == null ? "" : model.getExt1());
+        row.createCell(1)
+            .setCellValue(model.getJurisdiction() == null ? "" : model.getJurisdiction());
+        row.createCell(2)
+            .setCellValue(model.getResourceName() == null ? "" : model.getResourceName());
+        row.createCell(3).setCellValue(model.getName() == null ? "" : model.getName());
+        row.createCell(4).setCellValue(model.getIdCard() == null ? "" : model.getIdCard());
+        row.createCell(5)
+            .setCellValue(model.getActivityPlace() == null ? "" : model.getActivityPlace());
+        row.createCell(6).setCellValue(
+            model.getActivityPlaceDetail() == null ? "" : model.getActivityPlaceDetail());
+        row.createCell(7).setCellValue(model.getActivityTime() == null ? "" :
             DateUtil.format(model.getActivityTime(), DateUtil.DATETIME_FORMAT_PATTERN));
-        row.createCell(8).setCellValue(DateUtil.format(model.getPushTime()));
-        row.createCell(9).setCellValue(model.getDomicile());
-        row.createCell(10).setCellValue(model.getNation());
-        row.createCell(11).setCellValue(model.getStayInternetSite());
-        row.createCell(12).setCellValue(model.getTjTimeReason());
-        row.createCell(13).setCellValue(model.getVehicle());
-        row.createCell(14).setCellValue(model.getTjStaySite());
-        row.createCell(15).setCellValue(model.getTjContact());
-        row.createCell(16).setCellValue(model.getBelongings());
-        row.createCell(17).setCellValue(model.getPhone());
-        row.createCell(18).setCellValue(model.getVirtualIdentity());
-        row.createCell(19).setCellValue(model.getPeerStaff());
-        row.createCell(20).setCellValue(model.getStayStaff());
-        row.createCell(21).setCellValue(model.getCarNum());
-        row.createCell(22).setCellValue(model.getTerroristChar());
-        row.createCell(23).setCellValue(model.getControlType());
-        row.createCell(24).setCellValue(model.getCheckSite());
-        row.createCell(25).setCellValue(model.getCheckPolice());
+        row.createCell(8)
+            .setCellValue(model.getPushTime() == null ? "" : DateUtil.format(model.getPushTime()));
+        row.createCell(9).setCellValue(model.getDomicile() == null ? "" : model.getDomicile());
+        row.createCell(10).setCellValue(model.getNation() == null ? "" : model.getNation());
+        row.createCell(11)
+            .setCellValue(model.getStayInternetSite() == null ? "" : model.getStayInternetSite());
+        row.createCell(12)
+            .setCellValue(model.getTjTimeReason() == null ? "" : model.getTjTimeReason());
+        row.createCell(13).setCellValue(model.getVehicle() == null ? "" : model.getVehicle());
+        row.createCell(14).setCellValue(model.getTjStaySite() == null ? "" : model.getTjStaySite());
+        row.createCell(15).setCellValue(model.getTjContact() == null ? "" : model.getTjContact());
+        row.createCell(16).setCellValue(model.getBelongings() == null ? "" : model.getBelongings());
+        row.createCell(17).setCellValue(model.getPhone() == null ? "" : model.getPhone());
+        row.createCell(18)
+            .setCellValue(model.getVirtualIdentity() == null ? "" : model.getVirtualIdentity());
+        row.createCell(19).setCellValue(model.getPeerStaff() == null ? "" : model.getPeerStaff());
+        row.createCell(20).setCellValue(model.getStayStaff() == null ? "" : model.getStayStaff());
+        row.createCell(21).setCellValue(model.getCarNum() == null ? "" : model.getCarNum());
+        row.createCell(22)
+            .setCellValue(model.getTerroristChar() == null ? "" : model.getTerroristChar());
+        row.createCell(23)
+            .setCellValue(model.getControlType() == null ? "" : model.getControlType());
+        row.createCell(24).setCellValue(model.getCheckSite() == null ? "" : model.getCheckSite());
+        row.createCell(25)
+            .setCellValue(model.getCheckPolice() == null ? "" : model.getCheckPolice());
       }
     }
     return wb;

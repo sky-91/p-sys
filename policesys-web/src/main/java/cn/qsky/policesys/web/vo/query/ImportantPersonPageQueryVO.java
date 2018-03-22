@@ -12,7 +12,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 public class ImportantPersonPageQueryVO {
 
   @ApiModelProperty(value = "列控关键字")
-  private String controllKeyword;
+  private String controlKeyword;
 
   @ApiModelProperty(value = "群体类别")
   private String groupType;
@@ -24,10 +24,10 @@ public class ImportantPersonPageQueryVO {
   private String name;
 
   @ApiModelProperty(value = "联系方式")
-  private String phone;
+  private String phoneText;
 
   @ApiModelProperty(value = "微信绑定名称")
-  private String wechatName;
+  private String wechatNameText;
 
   @ApiModelProperty(value = "管辖单位")
   private String jurisdiction;
@@ -50,12 +50,12 @@ public class ImportantPersonPageQueryVO {
   @ApiModelProperty(value = "每页条数")
   private Integer pageSize;
 
-  public String getControllKeyword() {
-    return controllKeyword;
+  public String getControlKeyword() {
+    return controlKeyword;
   }
 
-  public void setControllKeyword(String controllKeyword) {
-    this.controllKeyword = controllKeyword;
+  public void setControlKeyword(String controlKeyword) {
+    this.controlKeyword = controlKeyword;
   }
 
   public String getGroupType() {
@@ -82,20 +82,20 @@ public class ImportantPersonPageQueryVO {
     this.name = name;
   }
 
-  public String getPhone() {
-    return phone;
+  public String getPhoneText() {
+    return phoneText;
   }
 
-  public void setPhone(String phone) {
-    this.phone = phone;
+  public void setPhoneText(String phoneText) {
+    this.phoneText = phoneText;
   }
 
-  public String getWechatName() {
-    return wechatName;
+  public String getWechatNameText() {
+    return wechatNameText;
   }
 
-  public void setWechatName(String wechatName) {
-    this.wechatName = wechatName;
+  public void setWechatNameText(String wechatNameText) {
+    this.wechatNameText = wechatNameText;
   }
 
   public String getJurisdiction() {

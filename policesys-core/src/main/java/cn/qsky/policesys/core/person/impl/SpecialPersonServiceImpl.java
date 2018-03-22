@@ -1,6 +1,6 @@
 package cn.qsky.policesys.core.person.impl;
 
-import cn.qsky.policesys.common.SourceNotFoundException;
+import cn.qsky.policesys.common.exception.SourceNotFoundException;
 import cn.qsky.policesys.core.dao.mapper.SpecialPersonMapper;
 import cn.qsky.policesys.core.dao.model.SpecialPersonModel;
 import cn.qsky.policesys.core.dao.model.SpecialPersonModelExample;
@@ -37,7 +37,7 @@ public class SpecialPersonServiceImpl implements SpecialPersonService {
   @Override
   public int countSpecialPerson(String idCard) {
     SpecialPersonModelExample example = new SpecialPersonModelExample();
-    example.or().andIdCardEqualTo(idCard);
+    example.or().andIdCardEqualTo(idCard).andDeleteFlagEqualTo(false);
     List<SpecialPersonModel> resultList = specialPersonMapper.selectByExample(example);
     if (CollectionUtils.isEmpty(resultList)) {
       return 0;
@@ -52,7 +52,16 @@ public class SpecialPersonServiceImpl implements SpecialPersonService {
 
   @Override
   public int updateSpecialPerson(SpecialPersonModel specialPersonModel) {
-    return specialPersonMapper.updateByPrimaryKeySelective(specialPersonModel);
+    SpecialPersonModelExample example = new SpecialPersonModelExample();
+    example.or().andIdCardEqualTo(specialPersonModel.getIdCard()).andDeleteFlagEqualTo(false);
+    return specialPersonMapper.updateByExampleSelective(specialPersonModel, example);
+  }
+
+  @Override
+  public int deleteSpecialPerson(String idCard) {
+    SpecialPersonModelExample example = new SpecialPersonModelExample();
+    example.or().andIdCardEqualTo(idCard);
+    return specialPersonMapper.deleteByExample(example);
   }
 
   @Override

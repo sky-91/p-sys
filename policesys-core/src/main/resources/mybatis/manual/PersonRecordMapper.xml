@@ -42,27 +42,27 @@
     delete_flag = 0
     <choose>
       <when test="queryDTO.startRecordDate == null and queryDTO.endRecordDate != null">
-        and record_date &lt;= #{endRecordDate,jdbcType=DATE}
+        and record_date &lt;= #{queryDTO.endRecordDate,jdbcType=DATE}
       </when>
       <when test="queryDTO.startRecordDate != null and queryDTO.endRecordDate == null">
-        and record_date >= #{startRecordDate,jdbcType=DATE}
+        and record_date >= #{queryDTO.startRecordDate,jdbcType=DATE}
       </when>
       <when test="queryDTO.startRecordDate != null and queryDTO.endRecordDate != null">
-        and record_date >= #{startRecordDate,jdbcType=DATE}
-        and record_date &lt;= #{endRecordDate,jdbcType=DATE}
+        and record_date >= #{queryDTO.startRecordDate,jdbcType=DATE}
+        and record_date &lt;= #{queryDTO.endRecordDate,jdbcType=DATE}
       </when>
     </choose>
     <if test="queryDTO.idCard != null and queryDTO.idCard != ''">
-      and id_card = #{idCard,jdbcType=VARCHAR}
+      and id_card = #{queryDTO.idCard,jdbcType=VARCHAR}
     </if>
     <if test="queryDTO.petitionRegion != null and queryDTO.petitionRegion != ''">
-      and petition_region = #{petitionRegion,jdbcType=VARCHAR}
+      and petition_region = #{queryDTO.petitionRegion,jdbcType=VARCHAR}
     </if>
     <if test="queryDTO.inciteMethod != null and queryDTO.inciteMethod != ''">
-      and incite_method = #{inciteMethod,jdbcType=VARCHAR}
+      and incite_method = #{queryDTO.inciteMethod,jdbcType=VARCHAR}
     </if>
     <if test="queryDTO.infoSources != null and queryDTO.infoSources != ''">
-      and info_sources = #{infoSources,jdbcType=VARCHAR}
+      and info_sources = #{queryDTO.infoSources,jdbcType=VARCHAR}
     </if>
   </select>
 </mapper>

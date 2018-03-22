@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * @author qsky on 18/1/7
@@ -16,9 +17,11 @@ public class GroupRecordPageQueryVO {
   private String groupName;
 
   @ApiModelProperty(value = "开始日期")
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private Date startRecordDate;
 
   @ApiModelProperty(value = "结束日期")
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private Date endRecordDate;
 
   @ApiModelProperty(value = "上访地点")

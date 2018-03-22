@@ -42,6 +42,14 @@ public interface SpecialPersonService {
   int updateSpecialPerson(final SpecialPersonModel specialPersonModel);
 
   /**
+   * 删除特殊人员
+   *
+   * @param idCard idCard
+   * @return int
+   */
+  int deleteSpecialPerson(final String idCard);
+
+  /**
    * 分页数据查询
    *
    * @param queryMap queryMap

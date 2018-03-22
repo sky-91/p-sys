@@ -24,6 +24,9 @@ public class GroupSummaryVO {
   @ApiModelProperty(value = "删除标记")
   private Boolean deleteFlag;
 
+  @ApiModelProperty(value = "扩展字段-序号")
+  private String ext1;
+
   @ApiModelProperty(value = "群体轨迹")
   private List<GroupRecordVO> records;
 
@@ -57,6 +60,14 @@ public class GroupSummaryVO {
 
   public void setDeleteFlag(Boolean deleteFlag) {
     this.deleteFlag = deleteFlag;
+  }
+
+  public String getExt1() {
+    return ext1;
+  }
+
+  public void setExt1(String ext1) {
+    this.ext1 = ext1;
   }
 
   public List<GroupRecordVO> getRecords() {

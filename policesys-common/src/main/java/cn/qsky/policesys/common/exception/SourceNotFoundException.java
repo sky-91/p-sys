@@ -1,4 +1,4 @@
-package cn.qsky.policesys.common;
+package cn.qsky.policesys.common.exception;
 
 import cn.qsky.policesys.common.log.GeneralException;
 import cn.qsky.policesys.common.log.enums.ErrorCode;

@@ -52,6 +52,23 @@ public interface ImportantPersonService {
   int updateImportantPersonInfo(final ImportantPersonInfoModel importantPersonInfoModel);
 
   /**
+   * 删除重点人员底库
+   *
+   * @param idCard idCard
+   * @return int
+   */
+  int deleteImportantPersonInfo(final String idCard);
+
+
+  /**
+   * 根据pk查询人员积分轨迹信息
+   *
+   * @param pk pk
+   * @return ImportantPersonRecordModel
+   */
+  ImportantPersonRecordModel getImportantPersonRecord(final String pk);
+
+  /**
    * 保存重点人员记录
    *
    * @param importantPersonRecordModel model
@@ -66,6 +83,14 @@ public interface ImportantPersonService {
    * @return int
    */
   int updateImportantPersonRecord(final ImportantPersonRecordModel importantPersonRecordModel);
+
+  /**
+   * 删除重点人员记录
+   *
+   * @param pk pk
+   * @return int
+   */
+  int deleteImportantPersonRecord(final String pk);
 
   /**
    * 人员底库分页数据查询

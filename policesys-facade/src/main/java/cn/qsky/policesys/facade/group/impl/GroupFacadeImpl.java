@@ -45,7 +45,8 @@ public class GroupFacadeImpl implements GroupFacade {
     GroupSummaryData groupSummaryData = CglibBeanUtil
         .copyProperties(groupService.getGroupSummary(groupName), GroupSummaryData.class);
     groupSummaryData.setRecords(
-        CglibBeanUtil.converterList(groupService.getGroupRecord(groupName), GroupRecordData.class));
+        CglibBeanUtil
+            .converterList(groupService.getGroupRecordByName(groupName), GroupRecordData.class));
     return groupSummaryData;
   }
 
@@ -69,9 +70,18 @@ public class GroupFacadeImpl implements GroupFacade {
   }
 
   @Override
-  public List<GroupRecordData> getGroupRecord(String groupName) {
+  @Transactional(rollbackFor = Exception.class)
+  public Boolean deleteGroupSummary(String groupName) {
+    if (groupService.deleteGroupSummary(groupName) == 1) {
+      return true;
+    }
+    return false;
+  }
+
+  @Override
+  public GroupRecordData getGroupRecord(String pk) {
     return CglibBeanUtil
-        .converterList(groupService.getGroupRecord(groupName), GroupRecordData.class);
+        .copyProperties(groupService.getGroupRecordByPk(pk), GroupRecordData.class);
   }
 
   @Override
@@ -87,6 +97,15 @@ public class GroupFacadeImpl implements GroupFacade {
   @Transactional(rollbackFor = Exception.class)
   public Boolean updateGroupRecord(GroupRecordData groupRecordData) {
     if (groupService.updateGroupRecord(mapper.map(groupRecordData, GroupRecordModel.class)) == 1) {
+      return true;
+    }
+    return false;
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public Boolean deleteGroupRecord(String pk) {
+    if (groupService.deleteGroupRecord(pk) == 1) {
       return true;
     }
     return false;

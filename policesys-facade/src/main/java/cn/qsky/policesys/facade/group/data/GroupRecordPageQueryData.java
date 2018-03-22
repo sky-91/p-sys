@@ -9,6 +9,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
  */
 public class GroupRecordPageQueryData {
 
+  private String pk;
+
   private String groupName;
 
   private Date startRecordDate;
@@ -26,6 +28,14 @@ public class GroupRecordPageQueryData {
   private Integer pageNumber;
 
   private Integer pageSize;
+
+  public String getPk() {
+    return pk;
+  }
+
+  public void setPk(String pk) {
+    this.pk = pk;
+  }
 
   public String getGroupName() {
     return groupName;

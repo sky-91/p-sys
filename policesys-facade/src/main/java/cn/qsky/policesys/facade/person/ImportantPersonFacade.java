@@ -14,8 +14,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 public interface ImportantPersonFacade {
 
   /**
-   * 根据身份证获取重点人员详细信息
-   * 获取所有的轨迹积分按时间倒序排列
+   * 根据身份证获取重点人员详细信息 获取所有的轨迹积分按时间倒序排列
    *
    * @param idCard 身份证
    * @return ImportantPersonInfoData
@@ -39,6 +38,14 @@ public interface ImportantPersonFacade {
   Boolean updateImportantPersonInfo(final ImportantPersonInfoData importantPersonInfoData);
 
   /**
+   * 删除重点人员底库
+   *
+   * @param idCard idCard
+   * @return boolean
+   */
+  Boolean deleteImportantPersonInfo(final String idCard);
+
+  /**
    * 分页数据查询
    *
    * @param importantPersonPageQueryData data
@@ -48,7 +55,15 @@ public interface ImportantPersonFacade {
       final ImportantPersonPageQueryData importantPersonPageQueryData);
 
   /**
-   * 保存重点人员底库
+   * 根据pk查询人员积分轨迹信息
+   *
+   * @param pk pk
+   * @return ImportantPersonRecordData
+   */
+  ImportantPersonRecordData getImportantPersonRecord(final String pk);
+
+  /**
+   * 保存重点人员轨迹
    *
    * @param importantPersonRecordData data
    * @return boolean
@@ -56,12 +71,20 @@ public interface ImportantPersonFacade {
   Boolean saveImportantPersonRecord(final ImportantPersonRecordData importantPersonRecordData);
 
   /**
-   * 更新重点人员底库
+   * 更新重点人员轨迹
    *
    * @param importantPersonRecordData data
    * @return boolean
    */
   Boolean updateImportantPersonRecord(final ImportantPersonRecordData importantPersonRecordData);
+
+  /**
+   * 删除重点人员轨迹
+   *
+   * @param pk pk
+   * @return boolean
+   */
+  Boolean deleteImportantPersonRecord(final String pk);
 
   /**
    * 分页数据查询
@@ -81,7 +104,7 @@ public interface ImportantPersonFacade {
   Boolean uploadPersonInfo(Workbook workbook);
 
   /**
-   * 文件导入人员记录
+   * 文件导入人员轨迹
    *
    * @param workbook 文件
    * @return boolean

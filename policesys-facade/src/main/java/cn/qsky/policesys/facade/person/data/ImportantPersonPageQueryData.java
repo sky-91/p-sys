@@ -8,7 +8,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  */
 public class ImportantPersonPageQueryData {
 
-  private String controllKeyword;
+  private String controlKeyword;
 
   private String groupType;
 
@@ -16,9 +16,9 @@ public class ImportantPersonPageQueryData {
 
   private String name;
 
-  private String phone;
+  private String phoneText;
 
-  private String wechatName;
+  private String wechatNameText;
 
   private String jurisdiction;
 
@@ -34,12 +34,12 @@ public class ImportantPersonPageQueryData {
 
   private Integer pageSize;
 
-  public String getControllKeyword() {
-    return controllKeyword;
+  public String getControlKeyword() {
+    return controlKeyword;
   }
 
-  public void setControllKeyword(String controllKeyword) {
-    this.controllKeyword = controllKeyword;
+  public void setControlKeyword(String controlKeyword) {
+    this.controlKeyword = controlKeyword;
   }
 
   public String getGroupType() {
@@ -66,20 +66,20 @@ public class ImportantPersonPageQueryData {
     this.name = name;
   }
 
-  public String getPhone() {
-    return phone;
+  public String getPhoneText() {
+    return phoneText;
   }
 
-  public void setPhone(String phone) {
-    this.phone = phone;
+  public void setPhoneText(String phoneText) {
+    this.phoneText = phoneText;
   }
 
-  public String getWechatName() {
-    return wechatName;
+  public String getWechatNameText() {
+    return wechatNameText;
   }
 
-  public void setWechatName(String wechatName) {
-    this.wechatName = wechatName;
+  public void setWechatNameText(String wechatNameText) {
+    this.wechatNameText = wechatNameText;
   }
 
   public String getJurisdiction() {

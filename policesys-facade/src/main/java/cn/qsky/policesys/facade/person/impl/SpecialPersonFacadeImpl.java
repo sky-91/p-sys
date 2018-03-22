@@ -87,6 +87,16 @@ public class SpecialPersonFacadeImpl implements SpecialPersonFacade {
   }
 
   @Override
+  @Transactional(rollbackFor = Exception.class)
+  public Boolean deleteSpecialPerson(String idCard) {
+    if (specialPersonService.deleteSpecialPerson(idCard) == 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @Override
   public PageData<SpecialPersonData> listSpecialPersonForPage(Map<String, Object> queryMap,
       Integer pageNum, Integer pageSize) {
     return PageDataConverter

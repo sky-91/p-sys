@@ -3,13 +3,10 @@ package cn.qsky.policesys.facade.person.impl;
 import cn.qsky.policesys.common.util.DateUtil;
 import cn.qsky.policesys.core.dao.model.ImportantPersonInfoModel;
 import cn.qsky.policesys.core.dao.model.ImportantPersonRecordModel;
-import cn.qsky.policesys.core.dao.model.PersonContactInfoModel;
 import cn.qsky.policesys.facade.person.ImportantPersonBuilder;
 import cn.qsky.policesys.facade.person.data.ImportantPersonInfoData;
 import cn.qsky.policesys.facade.person.data.ImportantPersonRecordData;
-import cn.qsky.policesys.facade.person.data.PersonContactInfoData;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -51,7 +48,7 @@ public class ImportantPersonBuilderImpl implements ImportantPersonBuilder {
         if (row.getCell(4) != null) {
           row.getCell(4).setCellType(CellType.STRING);
           if (StringUtils.isNotBlank(row.getCell(4).getStringCellValue())) {
-            person.setControllKeyword(row.getCell(4).getStringCellValue());
+            person.setControlKeyword(row.getCell(4).getStringCellValue());
           }
         }
         if (row.getCell(5) != null) {
@@ -86,22 +83,14 @@ public class ImportantPersonBuilderImpl implements ImportantPersonBuilder {
         }
         if (row.getCell(11) != null) {
           row.getCell(11).setCellType(CellType.STRING);
-          List<PersonContactInfoData> contactList = splitContact(
-              row.getCell(11).getStringCellValue(), true);
-          if (CollectionUtils.isNotEmpty(contactList)) {
-            person.setContacts(contactList);
+          if (StringUtils.isNotBlank(row.getCell(11).getStringCellValue())) {
+            person.setPhoneText(row.getCell(11).getStringCellValue());
           }
         }
         if (row.getCell(12) != null) {
           row.getCell(12).setCellType(CellType.STRING);
-          List<PersonContactInfoData> contactList = splitContact(
-              row.getCell(12).getStringCellValue(), false);
-          if (CollectionUtils.isNotEmpty(contactList)) {
-            if (CollectionUtils.isNotEmpty(person.getContacts())) {
-              person.getContacts().addAll(contactList);
-            } else {
-              person.setContacts(contactList);
-            }
+          if (StringUtils.isNotBlank(row.getCell(12).getStringCellValue())) {
+            person.setWechatNameText(row.getCell(12).getStringCellValue());
           }
         }
         if (row.getCell(13) != null) {
@@ -167,7 +156,7 @@ public class ImportantPersonBuilderImpl implements ImportantPersonBuilder {
         if (row.getCell(23) != null) {
           row.getCell(23).setCellType(CellType.STRING);
           if (StringUtils.isNotBlank(row.getCell(23).getStringCellValue())) {
-            person.setControllReason(row.getCell(23).getStringCellValue());
+            person.setControlReason(row.getCell(23).getStringCellValue());
           }
         }
         if (row.getCell(24) != null) {
@@ -182,24 +171,6 @@ public class ImportantPersonBuilderImpl implements ImportantPersonBuilder {
       resultList.add(person);
     }
     return resultList;
-  }
-
-  private List<PersonContactInfoData> splitContact(String context, Boolean isPhone) {
-    List<PersonContactInfoData> contactDataList = new ArrayList<>();
-    if (StringUtils.isNotBlank(context)) {
-      String[] contactArray = context.split("\\|");
-      List<String> contactList = Arrays.asList(contactArray);
-      for (String contact : contactList) {
-        PersonContactInfoData contactData = new PersonContactInfoData();
-        if (isPhone) {
-          contactData.setPhone(contact);
-        } else {
-          contactData.setWechatName(contact);
-        }
-        contactDataList.add(contactData);
-      }
-    }
-    return contactDataList;
   }
 
   @Override
@@ -377,50 +348,37 @@ public class ImportantPersonBuilderImpl implements ImportantPersonBuilder {
       for (int i = 0; i < personList.size(); i++) {
         row = sheet.createRow(i + 1);
         ImportantPersonInfoModel model = personList.get(i);
-        row.createCell(0).setCellValue(model.getExt1());
+        row.createCell(0).setCellValue(model.getExt1() == null ? "" : model.getExt1());
         row.createCell(1).setCellValue("");
         row.createCell(2).setCellValue("");
         row.createCell(3).setCellValue("");
-        row.createCell(4).setCellValue(model.getControllKeyword());
-        row.createCell(5).setCellValue(model.getGroupType());
-        row.createCell(6).setCellValue(model.getIdCard());
-        row.createCell(7).setCellValue(model.getName());
-        row.createCell(8).setCellValue(model.getMaritalStatus());
-        row.createCell(9).setCellValue(model.getDomicile());
-        row.createCell(10).setCellValue(model.getResidence());
-        List<PersonContactInfoModel> contactList = model.getContacts();
-        if (CollectionUtils.isNotEmpty(contactList)) {
-          String phone = "";
-          String wechat = "";
-          for (PersonContactInfoModel contact : contactList) {
-            if (StringUtils.isNotBlank(contact.getPhone())) {
-              phone = contact.getPhone() + "|";
-            }
-            if (StringUtils.isNotBlank(contact.getWechatName())) {
-              wechat = contact.getWechatName() + "|";
-            }
-          }
-          if (phone.length() > 0) {
-            phone = phone.substring(0, phone.length() - 2);
-          }
-          if (wechat.length() > 0) {
-            wechat = wechat.substring(0, wechat.length() - 2);
-          }
-          row.createCell(11).setCellValue(phone);
-          row.createCell(12).setCellValue(wechat);
-        }
-        row.createCell(13).setCellValue(model.getJurisdiction());
-        row.createCell(14).setCellValue(model.getJuriPolice());
-        row.createCell(15).setCellValue(model.getSex() ? "男" : "女");
-        row.createCell(16).setCellValue(model.getNation());
-        row.createCell(17).setCellValue(model.getAge());
-        row.createCell(18).setCellValue(model.getEducation());
-        row.createCell(19).setCellValue(model.getVeteranStatus());
-        row.createCell(20).setCellValue(model.getJob());
-        row.createCell(21).setCellValue(model.getWorkPlace());
-        row.createCell(22).setCellValue(model.getWorkStatus());
-        row.createCell(23).setCellValue(model.getControllReason());
-        row.createCell(24).setCellValue(model.getRemark());
+        row.createCell(4)
+            .setCellValue(model.getControlKeyword() == null ? "" : model.getControlKeyword());
+        row.createCell(5).setCellValue(model.getGroupType() == null ? "" : model.getGroupType());
+        row.createCell(6).setCellValue(model.getIdCard() == null ? "" : model.getIdCard());
+        row.createCell(7).setCellValue(model.getName() == null ? "" : model.getName());
+        row.createCell(8)
+            .setCellValue(model.getMaritalStatus() == null ? "" : model.getMaritalStatus());
+        row.createCell(9).setCellValue(model.getDomicile() == null ? "" : model.getDomicile());
+        row.createCell(10).setCellValue(model.getResidence() == null ? "" : model.getResidence());
+        row.createCell(11).setCellValue(model.getPhoneText() == null ? "" : model.getPhoneText());
+        row.createCell(12)
+            .setCellValue(model.getWechatNameText() == null ? "" : model.getWechatNameText());
+        row.createCell(13)
+            .setCellValue(model.getJurisdiction() == null ? "" : model.getJurisdiction());
+        row.createCell(14).setCellValue(model.getJuriPolice() == null ? "" : model.getJuriPolice());
+        row.createCell(15).setCellValue(model.getSex() == null ? "" : model.getSex() ? "男" : "女");
+        row.createCell(16).setCellValue(model.getNation() == null ? "" : model.getNation());
+        row.createCell(17).setCellValue(model.getAge() == null ? 0 : model.getAge());
+        row.createCell(18).setCellValue(model.getEducation() == null ? "" : model.getEducation());
+        row.createCell(19)
+            .setCellValue(model.getVeteranStatus() == null ? "" : model.getVeteranStatus());
+        row.createCell(20).setCellValue(model.getJob() == null ? "" : model.getJob());
+        row.createCell(21).setCellValue(model.getWorkPlace() == null ? "" : model.getWorkPlace());
+        row.createCell(22).setCellValue(model.getWorkStatus() == null ? "" : model.getWorkStatus());
+        row.createCell(23)
+            .setCellValue(model.getControlReason() == null ? "" : model.getControlReason());
+        row.createCell(24).setCellValue(model.getRemark() == null ? "" : model.getRemark());
       }
     }
     return wb;
@@ -429,7 +387,7 @@ public class ImportantPersonBuilderImpl implements ImportantPersonBuilder {
   @Override
   public HSSFWorkbook fillPersonRecordBook(List<ImportantPersonRecordModel> modelList) {
     HSSFWorkbook wb = new HSSFWorkbook();
-    HSSFSheet sheet = wb.createSheet("重点人员");
+    HSSFSheet sheet = wb.createSheet("轨迹积分");
     HSSFRow row = sheet.createRow(0);
 
     row.createCell(0).setCellValue("序号");
@@ -455,25 +413,35 @@ public class ImportantPersonBuilderImpl implements ImportantPersonBuilder {
       for (int i = 0; i < modelList.size(); i++) {
         row = sheet.createRow(i + 1);
         ImportantPersonRecordModel model = modelList.get(i);
-        row.createCell(0).setCellValue(model.getExt1());
-        row.createCell(1).setCellValue(model.getScore());
-        row.createCell(2).setCellValue(DateUtil.format(model.getRecordDate()));
-        row.createCell(3).setCellValue(model.getWeek());
-        row.createCell(4).setCellValue(model.getGroupType());
-        row.createCell(5).setCellValue(model.getName());
-        row.createCell(6).setCellValue(model.getIdCard());
-        row.createCell(7).setCellValue(model.getPetitionLocation());
-        row.createCell(8).setCellValue(model.getPetitionRegion());
-        row.createCell(9).setCellValue(model.getPetitionDynamic());
-        row.createCell(10).setCellValue(model.getConfirm() ? "是" : "否");
-        row.createCell(11).setCellValue(model.getInciteMethod());
-        row.createCell(12).setCellValue(model.getInfoSources());
-        row.createCell(13).setCellValue(model.getQqGroup());
-        row.createCell(14).setCellValue(model.getWechatGroup());
-        row.createCell(15).setCellValue(model.getGroupSize());
-        row.createCell(16).setCellValue(model.getConsequence() ? "是" : "否");
-        row.createCell(17).setCellValue(model.getConseScore());
-        row.createCell(18).setCellValue(model.getPetitionSituation());
+        row.createCell(0).setCellValue(model.getExt1() == null ? "" : model.getExt1());
+        row.createCell(1).setCellValue(model.getScore() == null ? 0 : model.getScore());
+        row.createCell(2).setCellValue(
+            model.getRecordDate() == null ? "" : DateUtil.format(model.getRecordDate()));
+        row.createCell(3).setCellValue(model.getWeek() == null ? "" : model.getWeek());
+        row.createCell(4).setCellValue(model.getGroupType() == null ? "" : model.getGroupType());
+        row.createCell(5).setCellValue(model.getName() == null ? "" : model.getName());
+        row.createCell(6).setCellValue(model.getIdCard() == null ? "" : model.getIdCard());
+        row.createCell(7)
+            .setCellValue(model.getPetitionLocation() == null ? "" : model.getPetitionLocation());
+        row.createCell(8)
+            .setCellValue(model.getPetitionRegion() == null ? "" : model.getPetitionRegion());
+        row.createCell(9)
+            .setCellValue(model.getPetitionDynamic() == null ? "" : model.getPetitionDynamic());
+        row.createCell(10)
+            .setCellValue(model.getConfirm() == null ? "" : model.getConfirm() ? "是" : "否");
+        row.createCell(11)
+            .setCellValue(model.getInciteMethod() == null ? "" : model.getInciteMethod());
+        row.createCell(12)
+            .setCellValue(model.getInfoSources() == null ? "" : model.getInfoSources());
+        row.createCell(13).setCellValue(model.getQqGroup() == null ? "" : model.getQqGroup());
+        row.createCell(14)
+            .setCellValue(model.getWechatGroup() == null ? "" : model.getWechatGroup());
+        row.createCell(15).setCellValue(model.getGroupSize() == null ? 0 : model.getGroupSize());
+        row.createCell(16)
+            .setCellValue(model.getConsequence() == null ? "" : model.getConsequence() ? "是" : "否");
+        row.createCell(17).setCellValue(model.getConseScore() == null ? 0 : model.getConseScore());
+        row.createCell(18)
+            .setCellValue(model.getPetitionSituation() == null ? "" : model.getPetitionSituation());
       }
     }
     return wb;

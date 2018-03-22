@@ -35,6 +35,7 @@ public class SpecialPersonVO {
   private String activityPlaceDetail;
 
   @ApiModelProperty(value = "活动时间")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
   private Date activityTime;
 
   @ApiModelProperty(value = "推送时间")

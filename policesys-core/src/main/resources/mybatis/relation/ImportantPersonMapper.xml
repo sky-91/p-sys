@@ -1,7 +1,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.qsky.policesys.core.dao.mapper.ImportantPersonInfoMapper">
-  <resultMap id="PersonListResultMap" type="cn.qsky.policesys.core.dao.model.ImportantPersonInfoModel">
+  <resultMap id="PersonListResultMap"
+    type="cn.qsky.policesys.core.dao.model.ImportantPersonInfoModel">
     <id column="PK" jdbcType="BIGINT" property="pk"/>
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
@@ -11,10 +12,12 @@
     <result column="nation" jdbcType="VARCHAR" property="nation"/>
     <result column="age" jdbcType="TINYINT" property="age"/>
     <result column="group_type" jdbcType="VARCHAR" property="groupType"/>
-    <result column="controll_keyword" jdbcType="VARCHAR" property="controllKeyword"/>
+    <result column="control_keyword" jdbcType="VARCHAR" property="controlKeyword"/>
     <result column="marital_status" jdbcType="CHAR" property="maritalStatus"/>
     <result column="domicile" jdbcType="VARCHAR" property="domicile"/>
     <result column="residence" jdbcType="VARCHAR" property="residence"/>
+    <result column="phone_text" jdbcType="VARCHAR" property="phoneText"/>
+    <result column="wechat_name_text" jdbcType="VARCHAR" property="wechatNameText"/>
     <result column="jurisdiction" jdbcType="VARCHAR" property="jurisdiction"/>
     <result column="juri_police" jdbcType="VARCHAR" property="juriPolice"/>
     <result column="education" jdbcType="VARCHAR" property="education"/>
@@ -22,72 +25,61 @@
     <result column="job" jdbcType="VARCHAR" property="job"/>
     <result column="work_place" jdbcType="VARCHAR" property="workPlace"/>
     <result column="work_status" jdbcType="CHAR" property="workStatus"/>
-    <result column="controll_reason" jdbcType="VARCHAR" property="controllReason"/>
+    <result column="control_reason" jdbcType="VARCHAR" property="controlReason"/>
     <result column="remark" jdbcType="VARCHAR" property="remark"/>
     <result column="ext1" jdbcType="VARCHAR" property="ext1"/>
-    <collection property="contacts" columnPrefix="c_"
-      ofType="cn.qsky.policesys.core.dao.model.PersonContactInfoModel">
-      <result column="phone" jdbcType="VARCHAR" property="phone"/>
-      <result column="wechat_name" jdbcType="VARCHAR" property="wechatName"/>
-    </collection>
   </resultMap>
+  <sql id="queryDtoWhereClause">
+    <where>
+      i.delete_flag = 0
+      <if test="queryDTO.controlKeyword != null and queryDTO.controlKeyword != ''">
+        and i.control_keyword = #{queryDTO.controlKeyword,jdbcType=VARCHAR}
+      </if>
+      <if test="queryDTO.groupType != null and queryDTO.groupType != ''">
+        and i.group_type = #{queryDTO.groupType,jdbcType=VARCHAR}
+      </if>
+      <if test="queryDTO.idCard != null and queryDTO.idCard != ''">
+        and i.id_card = #{queryDTO.idCard,jdbcType=CHAR}
+      </if>
+      <if test="queryDTO.name != null and queryDTO.name != ''">
+        and i.name = #{queryDTO.name,jdbcType=VARCHAR}
+      </if>
+      <if test="queryDTO.phoneText != null and queryDTO.phoneText != ''">
+        and i.phone_text like CONCAT('%', #{queryDTO.phoneText,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="queryDTO.wechatNameText != null and queryDTO.wechatNameText != ''">
+        and i.wechat_name_text like CONCAT('%', #{queryDTO.wechatNameText,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="queryDTO.jurisdiction != null and queryDTO.jurisdiction != ''">
+        and i.jurisdiction = #{queryDTO.jurisdiction,jdbcType=VARCHAR}
+      </if>
+      <if test="queryDTO.juriPolice != null and queryDTO.juriPolice != ''">
+        and i.juri_police = #{queryDTO.juriPolice,jdbcType=VARCHAR}
+      </if>
+      <if test="queryDTO.sex != null">
+        and i.sex = #{queryDTO.sex,jdbcType=BIT}
+      </if>
+      <choose>
+        <when test="queryDTO.startAge == null and queryDTO.endAge != null">
+          and i.age &lt;= #{queryDTO.endAge,jdbcType=TINYINT}
+        </when>
+        <when test="queryDTO.startAge != null and queryDTO.endAge == null">
+          and i.age >= #{queryDTO.startAge,jdbcType=TINYINT}
+        </when>
+        <when test="queryDTO.startAge != null and queryDTO.endAge != null">
+          and i.age >= #{queryDTO.startAge,jdbcType=TINYINT}
+          and i.age &lt;= #{queryDTO.endAge,jdbcType=TINYINT}
+        </when>
+      </choose>
+    </where>
+  </sql>
   <select id="listImportantPersonInfoForPage" resultMap="PersonListResultMap"
     parameterType="cn.qsky.policesys.core.dto.ImportantPersonPageQueryDTO">
     SELECT
-    i.PK AS PK, i.created_time AS created_time, i.modified_time AS modified_time, i.name AS name,
-    i.id_card AS id_card, i.sex AS sex, i.nation AS nation, i.age AS age, i.group_type AS group_type,
-    i.controll_keyword AS controll_keyword, i.marital_status AS marital_status, i.domicile AS domicile,
-    i.residence AS residence, i.jurisdiction AS jurisdiction, i.juri_police AS juri_police,
-    i.education AS education, i.veteran_status AS veteran_status, i.job AS job, i.work_place AS work_place,
-    i.work_status AS work_status, i.controll_reason AS controll_reason, i.remark AS remark,
-    i.delete_flag AS delete_flag, i.ext1 AS ext1
-    pc.phone AS c_phone, pc.wechat_name AS c_wechat_name
+    i.*
     FROM
     important_person_info AS i
-    JOIN
-    person_contact_info AS pc
-    ON i.pk = pc.person_pk
-    WHERE
-    i.delete_flag = 0
-    <if test="queryDTO.controllKeyword != null and queryDTO.controllKeyword != ''">
-      and i.controll_keyword = #{controllKeyword,jdbcType=VARCHAR}
-    </if>
-    <if test="queryDTO.groupType != null and queryDTO.groupType != ''">
-      and i.group_type = #{groupType,jdbcType=VARCHAR}
-    </if>
-    <if test="queryDTO.idCard != null and queryDTO.idCard != ''">
-      and i.id_card = #{idCard,jdbcType=CHAR}
-    </if>
-    <if test="queryDTO.name != null and queryDTO.name != ''">
-      and i.name = #{name,jdbcType=VARCHAR}
-    </if>
-    <if test="queryDTO.phone != null and queryDTO.phone != ''">
-      and pc.phone = #{phone,jdbcType=VARCHAR}
-    </if>
-    <if test="queryDTO.wechatName != null and queryDTO.wechatName != ''">
-      and pc.wechat_name = #{wechatName,jdbcType=VARCHAR}
-    </if>
-    <if test="queryDTO.jurisdiction != null and queryDTO.jurisdiction != ''">
-      and i.jurisdiction = #{jurisdiction,jdbcType=VARCHAR}
-    </if>
-    <if test="queryDTO.juriPolice != null and queryDTO.juriPolice != ''">
-      and i.juri_police = #{juriPolice,jdbcType=VARCHAR}
-    </if>
-    <if test="queryDTO.sex != null and queryDTO.sex != ''">
-      and i.sex = #{sex,jdbcType=BIT}
-    </if>
-    <choose>
-      <when test="queryDTO.startAge == null and queryDTO.endAge != null">
-        and i.age &lt;= #{endAge,jdbcType=TINYINT}
-      </when>
-      <when test="queryDTO.startAge != null and queryDTO.endAge == null">
-        and i.age >= #{startAge,jdbcType=TINYINT}
-      </when>
-      <when test="queryDTO.startAge != null and queryDTO.endAge != null">
-        and i.age >= #{startAge,jdbcType=TINYINT}
-        and i.age &lt;= #{endAge,jdbcType=TINYINT}
-      </when>
-    </choose>
+    <include refid="queryDtoWhereClause"/>
   </select>
 
   <resultMap id="PersonResultMap" type="cn.qsky.policesys.core.dao.model.ImportantPersonInfoModel">
@@ -100,10 +92,12 @@
     <result column="nation" jdbcType="VARCHAR" property="nation"/>
     <result column="age" jdbcType="TINYINT" property="age"/>
     <result column="group_type" jdbcType="VARCHAR" property="groupType"/>
-    <result column="controll_keyword" jdbcType="VARCHAR" property="controllKeyword"/>
+    <result column="control_keyword" jdbcType="VARCHAR" property="controlKeyword"/>
     <result column="marital_status" jdbcType="CHAR" property="maritalStatus"/>
     <result column="domicile" jdbcType="VARCHAR" property="domicile"/>
     <result column="residence" jdbcType="VARCHAR" property="residence"/>
+    <result column="phone_text" jdbcType="VARCHAR" property="phoneText"/>
+    <result column="wechat_name_text" jdbcType="VARCHAR" property="wechatNameText"/>
     <result column="jurisdiction" jdbcType="VARCHAR" property="jurisdiction"/>
     <result column="juri_police" jdbcType="VARCHAR" property="juriPolice"/>
     <result column="education" jdbcType="VARCHAR" property="education"/>
@@ -111,19 +105,9 @@
     <result column="job" jdbcType="VARCHAR" property="job"/>
     <result column="work_place" jdbcType="VARCHAR" property="workPlace"/>
     <result column="work_status" jdbcType="CHAR" property="workStatus"/>
-    <result column="controll_reason" jdbcType="VARCHAR" property="controllReason"/>
+    <result column="control_reason" jdbcType="VARCHAR" property="controlReason"/>
     <result column="remark" jdbcType="VARCHAR" property="remark"/>
     <result column="delete_flag" jdbcType="BIT" property="deleteFlag"/>
-    <collection property="contacts" columnPrefix="c_"
-      ofType="cn.qsky.policesys.core.dao.model.PersonContactInfoModel">
-      <id column="PK" jdbcType="BIGINT" property="pk"/>
-      <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
-      <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
-      <result column="person_pk" jdbcType="BIGINT" property="personPk"/>
-      <result column="phone" jdbcType="VARCHAR" property="phone"/>
-      <result column="wechat_name" jdbcType="VARCHAR" property="wechatName"/>
-      <result column="delete_flag" jdbcType="BIT" property="deleteFlag"/>
-    </collection>
     <collection property="records" columnPrefix="r_"
       ofType="cn.qsky.policesys.core.dao.model.ImportantPersonRecordModel">
       <id column="PK" jdbcType="BIGINT" property="pk"/>
@@ -153,16 +137,7 @@
   </resultMap>
   <select id="getImportantPersonInfo" resultMap="PersonResultMap" parameterType="java.lang.String">
     SELECT
-    i.PK AS PK, i.created_time AS created_time, i.modified_time AS modified_time, i.name AS name,
-    i.id_card AS id_card, i.sex AS sex, i.nation AS nation, i.age AS age, i.group_type AS group_type,
-    i.controll_keyword AS controll_keyword, i.marital_status AS marital_status, i.domicile AS domicile,
-    i.residence AS residence, i.jurisdiction AS jurisdiction, i.juri_police AS juri_police,
-    i.education AS education, i.veteran_status AS veteran_status, i.job AS job, i.work_place AS work_place,
-    i.work_status AS work_status, i.controll_reason AS controll_reason, i.remark AS remark,
-    i.delete_flag AS delete_flag,
-    pc.PK AS c_PK, pc.created_time AS c_created_time, pc.modified_time AS c_modified_time,
-    pc.person_pk AS c_person_pk, pc.phone AS c_phone, pc.wechat_name AS c_wechat_name,
-    pc.delete_flag AS c_delete_flag,
+    i.*,
     r.PK AS r_PK, r.created_time AS r_created_time, r.modified_time AS r_modified_time, r.name AS r_name,
     r.id_card AS r_id_card, r.score AS r_score, r.record_date AS r_record_date, r.week AS r_week,
     r.group_type AS r_group_type, r.petition_location AS r_petition_location,
@@ -173,14 +148,12 @@
     r.record_type AS r_record_type, r.delete_flag AS r_delete_flag
     FROM
     important_person_info AS i
-    JOIN
-    person_contact_info AS pc
-    ON i.pk = pc.person_pk
-    JOIN
+    LEFT JOIN
     important_person_record AS r
     ON i.id_card = r.id_card
     WHERE
     i.id_card = #{IdCard,jdbcType=VARCHAR}
-    and i.delete_flag = 0 and pc.delete_flag = 0 and r.delete_flag = 0
+    and i.delete_flag = 0
+    and (r.delete_flag = 0 or r.delete_flag is null)
   </select>
 </mapper>

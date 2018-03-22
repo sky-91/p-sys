@@ -5,6 +5,7 @@ import com.github.pagehelper.Page;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 
 /**
@@ -37,5 +38,23 @@ public class PageDataConverter {
     }
     return new PageData<>(page.getPageNum(),
         page.getPageSize(), page.getPages(), page.getTotal(), outList);
+  }
+
+  public static <S, T> PageData<T> manualPaging(List<S> sourceList, Class<T> T,
+      Integer pageNum, Integer pageSize, Integer total) {
+    if (CollectionUtils.isEmpty(sourceList)) {
+      return new PageData<>(pageNum, pageSize, 1, total, Collections.emptyList());
+    }
+    List<T> targetList = new ArrayList<>(16);
+    for (S source : sourceList) {
+      T target = BeanUtils.instantiate(T);
+      CglibBeanUtil.copyProperties(source, target);
+      targetList.add(target);
+    }
+    return new PageData<>(pageNum, pageSize, calculatePage(total, pageSize), total, targetList);
+  }
+
+  private static int calculatePage(Integer total, Integer pageSize) {
+    return total / pageSize + 1;
   }
 }

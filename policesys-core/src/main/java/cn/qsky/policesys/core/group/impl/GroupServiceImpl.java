@@ -1,6 +1,6 @@
 package cn.qsky.policesys.core.group.impl;
 
-import cn.qsky.policesys.common.SourceNotFoundException;
+import cn.qsky.policesys.common.exception.SourceNotFoundException;
 import cn.qsky.policesys.core.dao.mapper.GroupRecordMapper;
 import cn.qsky.policesys.core.dao.mapper.GroupSummaryMapper;
 import cn.qsky.policesys.core.dao.model.GroupRecordModel;
@@ -59,15 +59,36 @@ public class GroupServiceImpl implements GroupService {
 
   @Override
   public int updateGroupSummary(GroupSummaryModel groupSummaryModel) {
-    return groupSummaryMapper.updateByPrimaryKeySelective(groupSummaryModel);
+    GroupSummaryModelExample example = new GroupSummaryModelExample();
+    example.or().andGroupNameEqualTo(groupSummaryModel.getGroupName()).andDeleteFlagEqualTo(false);
+    return groupSummaryMapper.updateByExampleSelective(groupSummaryModel, example);
   }
 
   @Override
-  public List<GroupRecordModel> getGroupRecord(String groupName) {
+  public int deleteGroupSummary(String groupName) {
+    GroupRecordModelExample recordExample = new GroupRecordModelExample();
+    recordExample.or().andGroupNameEqualTo(groupName);
+    groupRecordMapper.deleteByExample(recordExample);
+    GroupSummaryModelExample example = new GroupSummaryModelExample();
+    example.or().andGroupNameEqualTo(groupName);
+    return groupSummaryMapper.deleteByExample(example);
+  }
+
+  @Override
+  public List<GroupRecordModel> getGroupRecordByName(String groupName) {
     GroupRecordModelExample example = new GroupRecordModelExample();
     example.createCriteria().andGroupNameEqualTo(groupName);
-    example.setOrderByClause("recordDate desc");
+    example.setOrderByClause("record_date desc");
     return groupRecordMapper.selectByExample(example);
+  }
+
+  @Override
+  public GroupRecordModel getGroupRecordByPk(String pk) {
+    GroupRecordModel model = groupRecordMapper.selectByPrimaryKey(Long.valueOf(pk));
+    if (model == null) {
+      throw new SourceNotFoundException();
+    }
+    return model;
   }
 
   @Override
@@ -78,6 +99,11 @@ public class GroupServiceImpl implements GroupService {
   @Override
   public int updateGroupRecord(GroupRecordModel groupRecordModel) {
     return groupRecordMapper.updateByPrimaryKeySelective(groupRecordModel);
+  }
+
+  @Override
+  public int deleteGroupRecord(String pk) {
+    return groupRecordMapper.deleteByPrimaryKey(Long.valueOf(pk));
   }
 
   @Override

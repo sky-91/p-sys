@@ -27,6 +27,7 @@ import org.dozer.DozerBeanMapper;
 import org.hibernate.validator.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,8 +58,8 @@ public class ImportantPersonController {
   @GetMapping("getById/{idCard}")
   public ImportantPersonInfoVO getImportantPersonInfo(
       @NotBlank @PathVariable(name = "idCard") final String idCard) {
-    return mapper
-        .map(importantPersonFacade.getImportantPersonInfo(idCard), ImportantPersonInfoVO.class);
+    return mapper.map(importantPersonFacade.getImportantPersonInfo(idCard),
+        ImportantPersonInfoVO.class);
   }
 
   @ApiOperation(value = "保存重点人员信息", notes = "保存接口")
@@ -80,6 +81,15 @@ public class ImportantPersonController {
     LOG.debug(importantPersonInfoVO.toString());
     return importantPersonFacade.updateImportantPersonInfo(mapper.map(importantPersonInfoVO,
         ImportantPersonInfoData.class));
+  }
+
+  @ApiOperation(value = "删除重点人员信息", notes = "删除接口")
+  @ApiImplicitParam(name = "idCard", value = "身份证", required = true, dataType = "String", paramType = "path")
+  @DeleteMapping("deleteById/{idCard}")
+  public Boolean deleteImportantPerson(
+      @NotBlank @PathVariable(name = "idCard") final String idCard) {
+    LOG.debug("deleteImportantPerson : {}", idCard);
+    return importantPersonFacade.deleteImportantPersonInfo(idCard);
   }
 
   @ApiOperation(value = "重点人员清单列表", notes = "分页显示重点人员清单")
@@ -108,6 +118,15 @@ public class ImportantPersonController {
     return true;
   }
 
+  @ApiOperation(value = "查询人员积分轨迹信息", notes = "根据pk查询")
+  @ApiImplicitParam(name = "pk", value = "pk", required = true, dataType = "String", paramType = "path")
+  @GetMapping("record/getByPk/{pk}")
+  public ImportantPersonRecordVO getImportantRecord(
+      @NotBlank @PathVariable(name = "pk") final String pk) {
+    return CglibBeanUtil.copyProperties(importantPersonFacade.getImportantPersonRecord(pk),
+        ImportantPersonRecordVO.class);
+  }
+
   @ApiOperation(value = "保存人员积分轨迹信息", notes = "保存接口")
   @ApiParam(name = "importantPersonRecordVO", value = "importantPersonRecordVO", required = true)
   @PostMapping("record/save")
@@ -115,7 +134,7 @@ public class ImportantPersonController {
       @Valid @RequestBody final ImportantPersonRecordVO importantPersonRecordVO) {
     LOG.debug(importantPersonRecordVO.toString());
     return importantPersonFacade
-        .saveImportantPersonRecord(mapper.map(importantPersonRecordVO,
+        .saveImportantPersonRecord(CglibBeanUtil.copyProperties(importantPersonRecordVO,
             ImportantPersonRecordData.class));
   }
 
@@ -126,8 +145,16 @@ public class ImportantPersonController {
       @Valid @RequestBody final ImportantPersonRecordVO importantPersonRecordVO) {
     LOG.debug(importantPersonRecordVO.toString());
     return importantPersonFacade
-        .updateImportantPersonRecord(mapper.map(importantPersonRecordVO,
+        .updateImportantPersonRecord(CglibBeanUtil.copyProperties(importantPersonRecordVO,
             ImportantPersonRecordData.class));
+  }
+
+  @ApiOperation(value = "删除人员积分轨迹信息", notes = "删除接口")
+  @ApiImplicitParam(name = "pk", value = "PK", required = true, dataType = "String", paramType = "path")
+  @DeleteMapping("record/deleteByPk/{pk}")
+  public Boolean deleteImportantRecord(@NotBlank @PathVariable(name = "pk") final String pk) {
+    LOG.debug("deleteImportantPerson : {}", pk);
+    return importantPersonFacade.deleteImportantPersonRecord(pk);
   }
 
   @ApiOperation(value = "重点人员积分轨迹清单列表", notes = "分页显示重点人员积分轨迹清单")
@@ -179,6 +206,6 @@ public class ImportantPersonController {
     importantRecordPageQueryVO.setPageSize(99999999);
     HSSFWorkbook book = importantPersonFacade.exportImportantRecord(CglibBeanUtil
         .copyProperties(importantRecordPageQueryVO, ImportantRecordPageQueryData.class));
-    ExportExcelUtil.generateExcelResponse("重点人员底库表", book, response);
+    ExportExcelUtil.generateExcelResponse("重点人员积分轨迹", book, response);
   }
 }

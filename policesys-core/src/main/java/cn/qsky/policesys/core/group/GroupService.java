@@ -45,12 +45,28 @@ public interface GroupService {
   int updateGroupSummary(final GroupSummaryModel groupSummaryModel);
 
   /**
+   * 删除群体汇总信息
+   *
+   * @param groupName groupName
+   * @return int
+   */
+  int deleteGroupSummary(final String groupName);
+
+  /**
    * 根据群体名称获取群体活动记录
    *
    * @param groupName 群体名称
    * @return list
    */
-  List<GroupRecordModel> getGroupRecord(final String groupName);
+  List<GroupRecordModel> getGroupRecordByName(final String groupName);
+
+  /**
+   * 根据pk获取群体活动记录
+   *
+   * @param pk pk
+   * @return list
+   */
+  GroupRecordModel getGroupRecordByPk(final String pk);
 
   /**
    * 保存群体活动记录
@@ -67,6 +83,14 @@ public interface GroupService {
    * @return int
    */
   int updateGroupRecord(final GroupRecordModel groupRecordModel);
+
+  /**
+   * 删除群体活动记录
+   *
+   * @param pk pk
+   * @return int
+   */
+  int deleteGroupRecord(final String pk);
 
   /**
    * 分页获取群体汇总信息
