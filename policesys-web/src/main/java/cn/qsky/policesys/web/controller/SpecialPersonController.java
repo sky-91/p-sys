@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -125,8 +126,8 @@ public class SpecialPersonController {
 
   @ApiOperation(value = "文件导入疆藏人员信息", notes = "导入文件")
   @PostMapping(value = "upload")
-  public @ResponseBody
-  Boolean importSpecialPerson(@RequestParam("file") MultipartFile file) {
+  @ResponseBody
+  public Map<String, List<String>> importSpecialPerson(@RequestParam("file") MultipartFile file) {
     if (!file.isEmpty()) {
       try {
         return specialPersonFacade
@@ -136,7 +137,7 @@ public class SpecialPersonController {
         LOG.error("File {} is wrong!", file.getOriginalFilename());
       }
     }
-    return true;
+    return null;
   }
 
   @ApiOperation(value = "导出疆藏人员EXCEL", notes = "导出疆藏人员EXCEL")

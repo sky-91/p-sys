@@ -4,6 +4,7 @@ import cn.qsky.policesys.common.data.PageData;
 import cn.qsky.policesys.facade.group.data.GroupRecordData;
 import cn.qsky.policesys.facade.group.data.GroupRecordPageQueryData;
 import cn.qsky.policesys.facade.group.data.GroupSummaryData;
+import java.util.List;
 import java.util.Map;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -103,7 +104,7 @@ public interface GroupFacade {
    * @param workbook 文件
    * @return boolean
    */
-  Boolean uploadGroupInfo(Workbook workbook);
+  Map<String, List<String>> uploadGroupInfo(Workbook workbook);
 
   /**
    * 文件导入群体活动记录
@@ -111,7 +112,7 @@ public interface GroupFacade {
    * @param workbook 文件
    * @return boolean
    */
-  Boolean uploadGroupRecord(Workbook workbook);
+  Map<String, List<String>> uploadGroupRecord(Workbook workbook);
 
   /**
    * 导出群体汇总信息EXCEL

@@ -4,11 +4,13 @@ import cn.qsky.policesys.common.data.PageData;
 import cn.qsky.policesys.common.data.PageDataConverter;
 import cn.qsky.policesys.common.util.CglibBeanUtil;
 import cn.qsky.policesys.common.util.DozerBeanMapperFactory;
+import cn.qsky.policesys.common.util.StringUtil;
 import cn.qsky.policesys.core.dao.model.SpecialPersonModel;
 import cn.qsky.policesys.core.person.SpecialPersonService;
 import cn.qsky.policesys.facade.person.SpecialPersonBuilder;
 import cn.qsky.policesys.facade.person.SpecialPersonFacade;
 import cn.qsky.policesys.facade.person.data.SpecialPersonData;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
@@ -105,28 +107,43 @@ public class SpecialPersonFacadeImpl implements SpecialPersonFacade {
   }
 
   @Override
-  public Boolean uploadSpecialPerson(Workbook workbook) {
+  @Transactional(rollbackFor = Exception.class)
+  public Map<String, List<String>> uploadSpecialPerson(Workbook workbook) {
     List<SpecialPersonData> dataList = specialPersonBuilder.buildPersonList(workbook);
+    List<String> saveList = new ArrayList<>();
+    List<String> updateList = new ArrayList<>();
+    List<String> failedList = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(dataList)) {
       for (SpecialPersonData personData : dataList) {
-        Boolean result;
-        if (specialPersonService.countSpecialPerson(personData.getIdCard()) == 1) {
-          result = updateSpecialPerson(personData);
-        } else {
-          result = saveSpecialPerson(personData);
-        }
-        if (!result) {
+        try {
+          handlePersonType(personData);
+          int count = specialPersonService.countSpecialPerson(personData.getIdCard());
+          if (count == 1 && specialPersonService.updateSpecialPerson(
+              CglibBeanUtil.copyProperties(personData, SpecialPersonModel.class)) == 1) {
+            updateList.add(personData.getIdCard());
+          } else if (count == 0 && specialPersonService
+              .saveSpecialPerson(CglibBeanUtil.copyProperties(personData, SpecialPersonModel.class))
+              == 1) {
+            saveList.add(personData.getIdCard());
+          } else {
+            LOG.error("Person: {} is error!", personData.getIdCard());
+            failedList.add(personData.getIdCard());
+          }
+        } catch (Exception e) {
           LOG.error("Person: {} is error!", personData.getIdCard());
+          e.printStackTrace();
+          failedList.add(personData.getIdCard());
         }
       }
     }
-    return true;
+    return StringUtil.generateMap(saveList, updateList, failedList);
   }
 
   @Override
   public HSSFWorkbook exportSpecialPerson(Map<String, Object> queryMap, Integer pageNum,
       Integer pageSize) {
-    return specialPersonBuilder.fillSpecialPersonBook(
-        specialPersonService.listSpecialPersonForPage(queryMap, pageNum, pageSize).getResult());
+    return specialPersonBuilder.fillSpecialPersonBook(CglibBeanUtil.converterList(
+        specialPersonService.listSpecialPersonForPage(queryMap, pageNum, pageSize).getResult(),
+        SpecialPersonData.class));
   }
 }

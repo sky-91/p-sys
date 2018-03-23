@@ -2,10 +2,10 @@ package cn.qsky.policesys.facade.person;
 
 import cn.qsky.policesys.common.data.PageData;
 import cn.qsky.policesys.facade.person.data.SpecialPersonData;
+import java.util.List;
+import java.util.Map;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
-
-import java.util.Map;
 
 /**
  * @author qsky on 17/12/3
@@ -59,9 +59,9 @@ public interface SpecialPersonFacade {
    * 文件导入疆藏人员信息
    *
    * @param workbook 文件
-   * @return boolean
+   * @return map
    */
-  Boolean uploadSpecialPerson(Workbook workbook);
+  Map<String, List<String>> uploadSpecialPerson(Workbook workbook);
 
   /**
    * 导出重点人员EXCEL

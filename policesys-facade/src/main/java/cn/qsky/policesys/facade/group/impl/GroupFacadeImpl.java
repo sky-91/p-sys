@@ -3,7 +3,9 @@ package cn.qsky.policesys.facade.group.impl;
 import cn.qsky.policesys.common.data.PageData;
 import cn.qsky.policesys.common.data.PageDataConverter;
 import cn.qsky.policesys.common.util.CglibBeanUtil;
+import cn.qsky.policesys.common.util.DateUtil;
 import cn.qsky.policesys.common.util.DozerBeanMapperFactory;
+import cn.qsky.policesys.common.util.StringUtil;
 import cn.qsky.policesys.core.dao.model.GroupRecordModel;
 import cn.qsky.policesys.core.dao.model.GroupSummaryModel;
 import cn.qsky.policesys.core.dto.GroupRecordPageQueryDTO;
@@ -13,6 +15,7 @@ import cn.qsky.policesys.facade.group.GroupFacade;
 import cn.qsky.policesys.facade.group.data.GroupRecordData;
 import cn.qsky.policesys.facade.group.data.GroupRecordPageQueryData;
 import cn.qsky.policesys.facade.group.data.GroupSummaryData;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
@@ -128,41 +131,58 @@ public class GroupFacadeImpl implements GroupFacade {
   }
 
   @Override
-  public Boolean uploadGroupInfo(Workbook workbook) {
+  public Map<String, List<String>> uploadGroupInfo(Workbook workbook) {
     List<GroupSummaryData> dataList = groupBuilder.buildSummaryList(workbook);
+    List<String> saveList = new ArrayList<>();
+    List<String> updateList = new ArrayList<>();
+    List<String> failedList = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(dataList)) {
       for (GroupSummaryData groupData : dataList) {
-        Boolean result;
-        if (groupService.countGroupSummary(groupData.getGroupName()) == 1) {
-          result = updateGroupSummary(groupData);
-        } else {
-          result = saveGroupSummary(groupData);
-        }
-        if (!result) {
-          LOG.error("Group : {} is error!", groupData.getGroupName());
+        try {
+          int count = groupService.countGroupSummary(groupData.getGroupName());
+          if (count == 1 && updateGroupSummary(groupData)) {
+            updateList.add(groupData.getGroupName());
+          } else if (count == 0 && saveGroupSummary(groupData)) {
+            saveList.add(groupData.getGroupName());
+          } else {
+            failedList.add(groupData.getGroupName());
+          }
+        } catch (Exception e) {
+          LOG.error("Group: {} is error!", groupData.getGroupName());
+          e.printStackTrace();
+          failedList.add(groupData.getGroupName());
         }
       }
     }
-    return true;
+    return StringUtil.generateMap(saveList, updateList, failedList);
   }
 
   @Override
-  public Boolean uploadGroupRecord(Workbook workbook) {
+  public Map<String, List<String>> uploadGroupRecord(Workbook workbook) {
     List<GroupRecordData> dataList = groupBuilder.buildRecordList(workbook);
+    List<String> saveList = new ArrayList<>();
+    List<String> updateList = new ArrayList<>();
+    List<String> failedList = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(dataList)) {
       for (GroupRecordData recordData : dataList) {
-        Boolean result;
-        if (groupService.countGroupSummary(recordData.getGroupName()) == 1) {
-          result = saveGroupRecord(recordData);
-        } else {
-          result = false;
-        }
-        if (!result) {
+        try {
+          int count = groupService.countGroupSummary(recordData.getGroupName());
+          if (count == 1 && saveGroupRecord(recordData)) {
+            saveList.add(recordData.getRecordDate() == null ? ""
+                : DateUtil.format(recordData.getRecordDate()) + "|" + recordData.getGroupName());
+          } else {
+            failedList.add(recordData.getRecordDate() == null ? ""
+                : DateUtil.format(recordData.getRecordDate()) + "|" + recordData.getGroupName());
+          }
+        } catch (Exception e) {
           LOG.error("Group record: {} is error!", recordData.getGroupName());
+          e.printStackTrace();
+          failedList.add(recordData.getRecordDate() == null ? ""
+              : DateUtil.format(recordData.getRecordDate()) + "|" + recordData.getGroupName());
         }
       }
     }
-    return true;
+    return StringUtil.generateMap(saveList, updateList, failedList);
   }
 
   @Override

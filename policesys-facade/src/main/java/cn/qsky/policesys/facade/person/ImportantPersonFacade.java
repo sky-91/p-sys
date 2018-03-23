@@ -5,6 +5,8 @@ import cn.qsky.policesys.facade.person.data.ImportantPersonInfoData;
 import cn.qsky.policesys.facade.person.data.ImportantPersonPageQueryData;
 import cn.qsky.policesys.facade.person.data.ImportantPersonRecordData;
 import cn.qsky.policesys.facade.person.data.ImportantRecordPageQueryData;
+import java.util.List;
+import java.util.Map;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -99,17 +101,17 @@ public interface ImportantPersonFacade {
    * 文件导入重点人员底库
    *
    * @param workbook 文件
-   * @return boolean
+   * @return map
    */
-  Boolean uploadPersonInfo(Workbook workbook);
+  Map<String, List<String>> uploadPersonInfo(Workbook workbook);
 
   /**
    * 文件导入人员轨迹
    *
    * @param workbook 文件
-   * @return boolean
+   * @return map
    */
-  Boolean uploadPersonRecord(Workbook workbook);
+  Map<String, List<String>> uploadPersonRecord(Workbook workbook);
 
   /**
    * 导出重点人员EXCEL

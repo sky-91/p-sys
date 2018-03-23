@@ -42,7 +42,7 @@ public class ImportantPersonBuilderImpl implements ImportantPersonBuilder {
         if (row.getCell(0) != null) {
           row.getCell(0).setCellType(CellType.STRING);
           if (StringUtils.isNotBlank(row.getCell(0).getStringCellValue())) {
-            person.setIndex(row.getCell(0).getStringCellValue());
+            person.setExt1(row.getCell(0).getStringCellValue());
           }
         }
         if (row.getCell(4) != null) {
@@ -190,7 +190,7 @@ public class ImportantPersonBuilderImpl implements ImportantPersonBuilder {
         if (row.getCell(0) != null) {
           row.getCell(0).setCellType(CellType.STRING);
           if (StringUtils.isNotBlank(row.getCell(0).getStringCellValue())) {
-            record.setIndex(row.getCell(0).getStringCellValue());
+            record.setExt1(row.getCell(0).getStringCellValue());
           }
         }
         if (row.getCell(1) != null) {

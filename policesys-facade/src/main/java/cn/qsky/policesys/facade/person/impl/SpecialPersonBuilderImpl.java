@@ -1,7 +1,6 @@
 package cn.qsky.policesys.facade.person.impl;
 
 import cn.qsky.policesys.common.util.DateUtil;
-import cn.qsky.policesys.core.dao.model.SpecialPersonModel;
 import cn.qsky.policesys.facade.person.SpecialPersonBuilder;
 import cn.qsky.policesys.facade.person.data.SpecialPersonData;
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public class SpecialPersonBuilderImpl implements SpecialPersonBuilder {
         if (row.getCell(0) != null) {
           row.getCell(0).setCellType(CellType.STRING);
           if (StringUtils.isNotBlank(row.getCell(0).getStringCellValue())) {
-            person.setIndex(row.getCell(0).getStringCellValue());
+            person.setExt1(row.getCell(0).getStringCellValue());
           }
         }
         if (row.getCell(1) != null) {
@@ -197,9 +196,14 @@ public class SpecialPersonBuilderImpl implements SpecialPersonBuilder {
   }
 
   @Override
-  public HSSFWorkbook fillSpecialPersonBook(List<SpecialPersonModel> personList) {
+  public HSSFWorkbook fillSpecialPersonBook(List<SpecialPersonData> personList) {
     HSSFWorkbook wb = new HSSFWorkbook();
     HSSFSheet sheet = wb.createSheet("疆藏人员");
+    fillSheetContent(sheet, personList);
+    return wb;
+  }
+
+  private HSSFSheet fillSheetContent(HSSFSheet sheet, List<SpecialPersonData> personList) {
     HSSFRow row = sheet.createRow(0);
 
     row.createCell(0).setCellValue("序号");
@@ -231,7 +235,7 @@ public class SpecialPersonBuilderImpl implements SpecialPersonBuilder {
     if (CollectionUtils.isNotEmpty(personList)) {
       for (int i = 0; i < personList.size(); i++) {
         row = sheet.createRow(i + 1);
-        SpecialPersonModel model = personList.get(i);
+        SpecialPersonData model = personList.get(i);
         row.createCell(0).setCellValue(model.getExt1() == null ? "" : model.getExt1());
         row.createCell(1)
             .setCellValue(model.getJurisdiction() == null ? "" : model.getJurisdiction());
@@ -272,6 +276,6 @@ public class SpecialPersonBuilderImpl implements SpecialPersonBuilder {
             .setCellValue(model.getCheckPolice() == null ? "" : model.getCheckPolice());
       }
     }
-    return wb;
+    return sheet;
   }
 }

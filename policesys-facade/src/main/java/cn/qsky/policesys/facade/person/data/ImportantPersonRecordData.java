@@ -3,15 +3,13 @@ package cn.qsky.policesys.facade.person.data;
 import java.util.Date;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.dozer.Mapping;
 
 /**
  * @author qsky on 17/12/6
  */
 public class ImportantPersonRecordData {
 
-  @Mapping("ext1")
-  private String index;
+  private String ext1;
 
   private Long pk;
 
@@ -55,20 +53,20 @@ public class ImportantPersonRecordData {
 
   private Boolean deleteFlag;
 
+  public String getExt1() {
+    return ext1;
+  }
+
+  public void setExt1(String ext1) {
+    this.ext1 = ext1;
+  }
+
   public Long getPk() {
     return pk;
   }
 
   public void setPk(Long pk) {
     this.pk = pk;
-  }
-
-  public String getIndex() {
-    return index;
-  }
-
-  public void setIndex(String index) {
-    this.index = index;
   }
 
   public String getName() {

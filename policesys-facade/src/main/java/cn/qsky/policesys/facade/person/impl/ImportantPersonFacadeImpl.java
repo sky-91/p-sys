@@ -3,7 +3,9 @@ package cn.qsky.policesys.facade.person.impl;
 import cn.qsky.policesys.common.data.PageData;
 import cn.qsky.policesys.common.data.PageDataConverter;
 import cn.qsky.policesys.common.util.CglibBeanUtil;
+import cn.qsky.policesys.common.util.DateUtil;
 import cn.qsky.policesys.common.util.DozerBeanMapperFactory;
+import cn.qsky.policesys.common.util.StringUtil;
 import cn.qsky.policesys.core.dao.model.ImportantPersonInfoModel;
 import cn.qsky.policesys.core.dao.model.ImportantPersonRecordModel;
 import cn.qsky.policesys.core.dto.ImportantPersonPageQueryDTO;
@@ -15,8 +17,10 @@ import cn.qsky.policesys.facade.person.data.ImportantPersonInfoData;
 import cn.qsky.policesys.facade.person.data.ImportantPersonPageQueryData;
 import cn.qsky.policesys.facade.person.data.ImportantPersonRecordData;
 import cn.qsky.policesys.facade.person.data.ImportantRecordPageQueryData;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.Resource;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -175,43 +179,62 @@ public class ImportantPersonFacadeImpl implements ImportantPersonFacade {
   }
 
   @Override
-  public Boolean uploadPersonInfo(Workbook workbook) {
+  public Map<String, List<String>> uploadPersonInfo(Workbook workbook) {
     List<ImportantPersonInfoData> dataList = importantPersonBuilder.buildPersonInfoList(workbook);
+    List<String> saveList = new ArrayList<>();
+    List<String> updateList = new ArrayList<>();
+    List<String> failedList = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(dataList)) {
       for (ImportantPersonInfoData personData : dataList) {
-        Boolean result;
-        if (importantPersonService.countImportantPerson(personData.getIdCard()) == 1) {
-          result = updateImportantPersonInfo(personData);
-        } else {
-          result = saveImportantPersonInfo(personData);
-        }
-        if (!result) {
+        int count = importantPersonService.countImportantPerson(personData.getIdCard());
+        try {
+          if (count == 1 && updateImportantPersonInfo(personData)) {
+            updateList.add(personData.getIdCard());
+          } else if (count == 0 && saveImportantPersonInfo(personData)) {
+            saveList.add(personData.getIdCard());
+          } else {
+            LOG.error("Person: {} is error!", personData.getIdCard());
+            failedList.add(personData.getIdCard());
+          }
+        } catch (Exception e) {
           LOG.error("Person: {} is error!", personData.getIdCard());
+          e.printStackTrace();
+          failedList.add(personData.getIdCard());
         }
       }
     }
-    return true;
+    return StringUtil.generateMap(saveList, updateList, failedList);
   }
 
   @Override
-  public Boolean uploadPersonRecord(Workbook workbook) {
+  public Map<String, List<String>> uploadPersonRecord(Workbook workbook) {
     List<ImportantPersonRecordData> dataList = importantPersonBuilder
         .buildPersonRecordList(workbook);
+    List<String> saveList = new ArrayList<>();
+    List<String> updateList = new ArrayList<>();
+    List<String> failedList = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(dataList)) {
       for (ImportantPersonRecordData recordData : dataList) {
-        Boolean result;
-        if (importantPersonService.countImportantPerson(recordData.getIdCard()) == 1) {
-          result = importantPersonService.saveImportantPersonRecord(
-              CglibBeanUtil.copyProperties(recordData, ImportantPersonRecordModel.class)) == 1;
-        } else {
-          result = false;
-        }
-        if (!result) {
-          LOG.error("Person: {} is error!", recordData.getIdCard());
+        try {
+          int count = importantPersonService.countImportantPerson(recordData.getIdCard());
+          if (count == 1 && importantPersonService.saveImportantPersonRecord(
+              CglibBeanUtil.copyProperties(recordData, ImportantPersonRecordModel.class)) == 1) {
+            saveList.add(recordData.getRecordDate() == null ? ""
+                : DateUtil.format(recordData.getRecordDate()) + "|" + recordData.getIdCard());
+          } else {
+            LOG.error("Record: {} is error!", recordData.getIdCard());
+            failedList.add(recordData.getRecordDate() == null ? ""
+                : DateUtil.format(recordData.getRecordDate()) + "|" + recordData.getIdCard());
+          }
+        } catch (Exception e) {
+          LOG.error("Record: {} is error!", recordData.getIdCard());
+          e.printStackTrace();
+          failedList.add(recordData.getRecordDate() == null ? ""
+              : DateUtil.format(recordData.getRecordDate()) + "|" + recordData.getIdCard());
         }
       }
     }
-    return true;
+    return StringUtil.generateMap(saveList, updateList, failedList);
   }
 
   @Override

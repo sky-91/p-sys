@@ -18,6 +18,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.util.List;
+import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -105,7 +107,7 @@ public class ImportantPersonController {
   @ApiOperation(value = "文件导入重点人员信息", notes = "导入文件")
   @PostMapping(value = "/upload")
   public @ResponseBody
-  Boolean importPerson(@RequestParam("file") MultipartFile file) {
+  Map<String, List<String>> importPerson(@RequestParam("file") MultipartFile file) {
     if (!file.isEmpty()) {
       try {
         return importantPersonFacade
@@ -115,7 +117,7 @@ public class ImportantPersonController {
         LOG.error("Import important person, File {} is wrong!", file.getOriginalFilename());
       }
     }
-    return true;
+    return null;
   }
 
   @ApiOperation(value = "查询人员积分轨迹信息", notes = "根据pk查询")
@@ -170,7 +172,7 @@ public class ImportantPersonController {
   @ApiOperation(value = "文件导入重点人员活动轨迹", notes = "导入文件")
   @PostMapping(value = "record/upload")
   public @ResponseBody
-  Boolean importRecord(@RequestParam("file") MultipartFile file) {
+  Map<String, List<String>> importRecord(@RequestParam("file") MultipartFile file) {
     if (!file.isEmpty()) {
       try {
         return importantPersonFacade
@@ -180,7 +182,7 @@ public class ImportantPersonController {
         LOG.error("Import important person record, File {} is wrong!", file.getOriginalFilename());
       }
     }
-    return true;
+    return null;
   }
 
   @ApiOperation(value = "导出重点人员EXCEL", notes = "导出重点人员EXCEL")

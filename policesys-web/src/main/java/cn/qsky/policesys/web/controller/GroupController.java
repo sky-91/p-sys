@@ -18,6 +18,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -161,7 +162,7 @@ public class GroupController {
   @ApiOperation(value = "文件导入群体汇总信息", notes = "导入文件")
   @PostMapping(value = "groupSummary/upload")
   public @ResponseBody
-  Boolean importGroup(@RequestParam("file") MultipartFile file) {
+  Map<String, List<String>> importGroup(@RequestParam("file") MultipartFile file) {
     if (!file.isEmpty()) {
       try {
         return groupFacade.uploadGroupInfo(WorkbookFactory.create(file.getInputStream()));
@@ -170,13 +171,13 @@ public class GroupController {
         LOG.error("Import group, File {} is wrong!", file.getOriginalFilename());
       }
     }
-    return true;
+    return null;
   }
 
   @ApiOperation(value = "文件导入群体活动记录", notes = "导入文件")
   @PostMapping(value = "groupRecord/upload")
   public @ResponseBody
-  Boolean importRecord(@RequestParam("file") MultipartFile file) {
+  Map<String, List<String>> importRecord(@RequestParam("file") MultipartFile file) {
     if (!file.isEmpty()) {
       try {
         return groupFacade.uploadGroupRecord(WorkbookFactory.create(file.getInputStream()));
@@ -185,7 +186,7 @@ public class GroupController {
         LOG.error("Import group record, File {} is wrong!", file.getOriginalFilename());
       }
     }
-    return true;
+    return null;
   }
 
   @ApiOperation(value = "导出群体汇总信息EXCEL", notes = "导出群体汇总信息EXCEL")

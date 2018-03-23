@@ -1,6 +1,5 @@
 package cn.qsky.policesys.facade.person;
 
-import cn.qsky.policesys.core.dao.model.SpecialPersonModel;
 import cn.qsky.policesys.facade.person.data.SpecialPersonData;
 import java.util.List;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -25,5 +24,5 @@ public interface SpecialPersonBuilder {
    * @param personList personList
    * @return HSSFWorkbook
    */
-  HSSFWorkbook fillSpecialPersonBook(List<SpecialPersonModel> personList);
+  HSSFWorkbook fillSpecialPersonBook(List<SpecialPersonData> personList);
 }
