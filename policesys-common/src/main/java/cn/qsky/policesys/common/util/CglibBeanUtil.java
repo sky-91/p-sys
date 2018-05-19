@@ -1,6 +1,5 @@
 package cn.qsky.policesys.common.util;
 
-import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
